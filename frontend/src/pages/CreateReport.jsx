@@ -5,8 +5,6 @@ const API_BASE = import.meta.env.VITE_API_URL || "";
 
 const CURRENT_YEAR = new Date().getFullYear();
 const YEARS = Array.from({ length: 10 }, (_, i) => CURRENT_YEAR - i);
-const [departments, setDepartments] = useState([]);
-
 
 const MAX_DESC = 1000;
 
@@ -25,7 +23,7 @@ export default function CreateReport() {
   const [loading, setLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
   const titleRef = useRef(null);
-
+  const [departments, setDepartments] = useState([]);
   useEffect(() => {
     if (!localStorage.getItem("token")) {
       navigate("/login", { replace: true });
@@ -37,11 +35,19 @@ export default function CreateReport() {
   useEffect(() => {
     const fetchDepartments = async () => {
       try {
-        const res = await fetch(`${API}/api/departments`);
+        const token = localStorage.getItem("token");
+
+        const res = await fetch(`${API_BASE}/api/departments`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         const data = await res.json();
+        console.log("API RESPONSE:", data);
         setDepartments(data);
       } catch (err) {
         console.error("Failed to load departments", err);
+        setDepartments([]);
       }
     };
 
@@ -53,7 +59,7 @@ export default function CreateReport() {
     else if (form.title.length > 120)
       e.title = "Title must be under 120 characters.";
     if (!form.year) e.year = "Please select a year.";
-    if (!form.department) e.department = "Please select a department.";
+    if (!form.department_id) e.department_id = "Please select a department.";
     if (!form.description.trim()) e.description = "Description is required.";
     else if (form.description.length > MAX_DESC)
       e.description = `Max ${MAX_DESC} characters.`;
@@ -61,16 +67,20 @@ export default function CreateReport() {
   };
 
   const handleChange = (e) => {
-      setForm({
-        ...form,
-        [e.target.name]: e.target.value,
-      });
-    };
+    const { name, value } = e.target;
+
+    setForm({
+      ...form,
+      [name]: value,
+    });
+
     setErrors((prev) => ({ ...prev, [name]: undefined }));
     setApiError("");
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const fieldErrors = validate();
     if (Object.keys(fieldErrors).length) {
       setErrors(fieldErrors);
@@ -82,37 +92,43 @@ export default function CreateReport() {
 
     try {
       const token = localStorage.getItem("token");
+
       const res = await fetch(`${API_BASE}/api/reports`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           title: form.title.trim(),
           year: Number(form.year),
-          department: form.department,
+          department_id: form.department_id,
           description: form.description.trim(),
         }),
       });
 
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
 
       if (res.status === 401 || res.status === 403) {
         navigate("/login", { replace: true });
         return;
       }
-      if (!res.ok)
+
+      if (!res.ok) {
         throw new Error(
           data.message || data.error || "Failed to create report.",
         );
+      }
 
       const id = data.id || data._id || data.reportId;
-      if (!id) throw new Error("Server did not return a report ID.");
 
-      navigate(`/reports/${id}`);
+      if (!id) {
+        throw new Error("Server did not return a report ID.");
+      }
+
+      navigate(`/dashboard/reports/${id}`);
     } catch (err) {
-      setApiError(err.message || "Something went wrong. Please try again.");
+      setApiError(err.message || "Something went wrong.");
     } finally {
       setLoading(false);
     }
@@ -557,7 +573,7 @@ export default function CreateReport() {
                     value={form.title}
                     onChange={handleChange}
                     disabled={loading}
-                    maxLength={150}
+                    maxLength={120}
                     className={errors.title ? "err" : ""}
                     autoComplete="off"
                   />
@@ -592,6 +608,7 @@ export default function CreateReport() {
                       disabled={loading}
                       className={errors.year ? "err" : ""}
                     >
+                      <option value="">Select year</option>
                       {YEARS.map((y) => (
                         <option key={y} value={y}>
                           {y}
@@ -623,8 +640,10 @@ export default function CreateReport() {
                         </option>
                       ))}
                     </select>
-                    {errors.department && (
-                      <span className="field-error">{errors.department}</span>
+                    {errors.department_id && (
+                      <span className="field-error">
+                        {errors.department_id}
+                      </span>
                     )}
                   </div>
                 </div>
@@ -713,7 +732,7 @@ export default function CreateReport() {
                 {[
                   { label: "Title", filled: form.title.trim().length > 0 },
                   { label: "Year", filled: !!form.year },
-                  { label: "Department", filled: !!form.department },
+                  { label: "Department", filled: !!form.department_id },
                   {
                     label: "Description",
                     filled: form.description.trim().length > 0,
@@ -810,4 +829,4 @@ export default function CreateReport() {
       </div>
     </>
   );
-};
+}

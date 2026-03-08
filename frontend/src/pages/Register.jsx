@@ -5,8 +5,8 @@ const API_BASE = import.meta.env.VITE_API_URL || "";
 
 // ── Role options available to admin when creating a new user ──
 const ROLES = [
-  { value: "user", label: "User", desc: "Standard access" },
-  { value: "editor", label: "Editor", desc: "Can create & edit content" },
+  { value: "user", label: "Student", desc: "Standard access" },
+  { value: "editor", label: "Faculty", desc: "Can create & edit content" },
   { value: "admin", label: "Admin", desc: "Full system access" },
 ];
 
@@ -92,13 +92,21 @@ export default function Register() {
         throw new Error(data.message || data.error || "Registration failed.");
 
       setSuccess({ name: form.name.trim(), email: form.email.trim() });
+
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
+
       setForm({
         name: "",
         email: "",
         password: "",
         confirmPassword: "",
-        role: "user",
+        role: "student",
       });
+
+      // Redirect to login after success
+      navigate("/login");
     } catch (err) {
       setApiError(err.message || "Something went wrong.");
     } finally {

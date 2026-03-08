@@ -17,11 +17,16 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+
         <Route path="/dashboard" element={<Layout />}>
           <Route index element={<Dashboard />} />
+
           <Route path="reports" element={<Reports />} />
+
           <Route path="reports/create" element={<CreateReport />} />
+
           <Route path="reports/:id" element={<ReportDetails />} />
+
           <Route path="approvals" element={<Approvals />} />
         </Route>
       </Routes>
