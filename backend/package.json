@@ -1,0 +1,27 @@
+{
+  "name": "afm_backend",
+  "version": "1.0.0",
+  "description": "Backend Logic for Academic file management system",
+  "license": "ISC",
+  "author": "Amrit Kumar",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1693.0",
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "fs": "^0.0.1-security",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.0.2",
+    "mysql2": "^3.17.1",
+    "pdfkit": "^0.17.2",
+    "recharts": "^3.8.0",
+    "uuid": "^13.0.0"
+  }
+}
