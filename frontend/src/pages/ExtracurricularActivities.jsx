@@ -37,47 +37,62 @@ const activities = [
   },
 ];
 
-export default function Activities() {
+export default function ExtracurricularActivities() {
   return (
     <>
       <style>{`
         * { box-sizing: border-box; }
 
-        .activities-page {
-          min-height: 100vh;
-          overflow-y: auto;
-          padding: 24px 14px 36px;
-          font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-          background:
-            radial-gradient(circle at 10% 10%, rgba(37, 99, 235, 0.10), transparent 35%),
-            radial-gradient(circle at 90% 20%, rgba(14, 116, 144, 0.10), transparent 35%),
-            linear-gradient(180deg, #f9fbff 0%, #eff5ff 100%);
-          color: #17213a;
+        :root {
+          --ink: #0f0f0f;
+          --paper: #f5f2ec;
+          --cream: #ede8de;
+          --accent: #c8522a;
+          --accent-dark: #a0401e;
+          --muted: #8a8178;
+        .badge {
+          display: inline-block;
+          font-size: 11px;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+          background: #c8522a;
+          color: #fff;
+          border-radius: 999px;
+          padding: 5px 10px;
+          font-weight: 700;
+          margin-bottom: 10px;
         }
 
         .wrap {
-          max-width: 980px;
+          max-width: 1140px;
           margin: 0 auto;
+          width: 100%;
         }
 
         .topbar {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 18px;
+          margin-bottom: 20px;
           gap: 10px;
+          background: var(--accent);
+          border: 1px solid var(--accent-dark);
+          border-radius: 18px;
+          padding: 22px 24px;
+          box-shadow: 0 14px 26px var(--shadow);
         }
 
         .title {
           margin: 0;
-          font-size: 32px;
-          line-height: 1.1;
+          font-size: 34px;
+          line-height: 1.06;
           letter-spacing: -0.01em;
+          color: #fff;
         }
 
         .subtitle {
           margin: 8px 0 0;
-          color: #4a5b7a;
+          color: var(--cream);
           font-size: 14px;
         }
 
@@ -98,16 +113,35 @@ export default function Activities() {
 
         .grid {
           display: grid;
-          gap: 12px;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 24px;
+          grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+          align-items: stretch;
         }
 
-        .card {
-          border: 1px solid #dce6fa;
-          background: #ffffff;
-          border-radius: 14px;
-          padding: 16px;
-          box-shadow: 0 10px 20px rgba(20, 40, 80, 0.06);
+          .card::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #a0401e, #c8522a);
+          }
+        }
+
+        .card:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 14px 28px rgba(20, 40, 80, 0.12);
+        }
+
+        .card::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 0;
+          height: 4px;
+          background: linear-gradient(90deg, #1d4ed8, #60a5fa);
         }
 
         .badge {
@@ -116,36 +150,47 @@ export default function Activities() {
           letter-spacing: 0.04em;
           text-transform: uppercase;
           background: #dbeafe;
-          color: #1e3a8a;
+          color: #16356e;
           border-radius: 999px;
-          padding: 5px 9px;
+          padding: 5px 10px;
           font-weight: 700;
           margin-bottom: 10px;
         }
 
-        .card h3 {
-          margin: 0;
-          font-size: 20px;
+        .card {
+          border: 1px solid var(--border);
+          background: #fff;
+          border-radius: 14px;
+          padding: 24px 20px 20px 20px;
+          box-shadow: 0 10px 20px rgba(20, 40, 80, 0.07);
+          position: relative;
+          overflow: hidden;
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          min-height: 210px;
         }
-
-        .date {
-          margin: 8px 0 12px;
-          color: #475a7a;
           font-size: 13px;
         }
 
         .desc {
           margin: 0;
-          color: #2a3852;
+          color: #2b4778;
           line-height: 1.5;
           font-size: 14px;
         }
 
+        @media (max-width: 900px) {
+          .wrap { max-width: 100%; padding: 0 6px; }
+          .grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+        }
         @media (max-width: 760px) {
-          .activities-page { padding: 12px 10px 24px; }
+          .activities-page { padding: 12px 4px 24px; }
           .topbar { align-items: flex-start; flex-direction: column; }
           .title { font-size: 26px; }
-          .grid { grid-template-columns: 1fr; }
+          .grid { grid-template-columns: 1fr; gap: 12px; }
+          .card { min-width: 0; min-height: 160px; padding: 16px 8px 14px 8px; }
         }
       `}</style>
 
@@ -153,7 +198,7 @@ export default function Activities() {
         <div className="wrap">
           <div className="topbar">
             <div>
-              <h1 className="title">Activities</h1>
+              <h1 className="title">Extracurricular Activities</h1>
               <p className="subtitle">Upcoming events, workshops, and student programs</p>
             </div>
           </div>

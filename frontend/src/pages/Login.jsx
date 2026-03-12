@@ -363,12 +363,15 @@ export default function Login() {
           <div className="left-rule">
             <span />
             <p>Secure Access</p>
+            <span></span>
           </div>
 
           <div className="left-headline">
-            Where your work<br />
-            <em>lives</em> and<br />
-            breathes.
+            Annual Report Portal<br />
+            for
+
+            <em> Institutional</em> <br />
+            excellence
           </div>
 
           <div className="left-footer">

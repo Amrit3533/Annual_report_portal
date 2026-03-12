@@ -1,7 +1,9 @@
+
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { config } from "../../../backend/config/db";
+
+const initialAchievements = [];
 
 export default function StudentAchievements() {
   const [achievements, setAchievements] = useState(initialAchievements);
@@ -54,18 +56,19 @@ export default function StudentAchievements() {
     setShowForm(false);
   };
 
-  const API = process.env.VITE_API_URL
+  const API = import.meta.env.VITE_API_URL;
+  const config = {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`
+    }
+  };
 
   useEffect(() => {
     axios
       .get(`${API}/api/student-achievements`, config)
       .then((res) => setAchievements(res.data));
-  }, []);
-  useEffect(() => {
-    axios
-      .post(`${API}/api/student-achievements`, config)
-      .then((res) => setAchievements(res.data));
-  }, []);
+    // If you want to POST, do it on form submit, not here
+  }, [API]);
 
   return (
     <>
@@ -73,13 +76,14 @@ export default function StudentAchievements() {
         * { box-sizing: border-box; }
 
         :root {
-          --ink: #0f2347;
-          --mid: #1d4ed8;
-          --mid-dark: #1e40af;
-          --sky: #eff6ff;
-          --line: #d6e3ff;
-          --muted: #516487;
-          --card: #ffffff;
+          --ink: #0f0f0f;
+          --paper: #f5f2ec;
+          --cream: #ede8de;
+          --accent: #c8522a;
+          --accent-dark: #a0401e;
+          --muted: #8a8178;
+          --border: #d4cfc5;
+          --shadow: rgba(15,15,15,0.08);
         }
 
         .achievements-page {
@@ -87,10 +91,7 @@ export default function StudentAchievements() {
           overflow-y: auto;
           padding: 24px 14px 36px;
           font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-          background:
-            radial-gradient(circle at 8% 12%, rgba(59, 130, 246, 0.2), transparent 35%),
-            radial-gradient(circle at 88% 2%, rgba(29, 78, 216, 0.22), transparent 32%),
-            linear-gradient(180deg, #eaf1ff 0%, #dfeafe 100%);
+          background: var(--paper);
           color: var(--ink);
         }
 
@@ -105,11 +106,11 @@ export default function StudentAchievements() {
           align-items: center;
           margin-bottom: 20px;
           gap: 10px;
-          background: linear-gradient(140deg, #0f2347 0%, #1d4ed8 100%);
-          border: 1px solid rgba(255, 255, 255, 0.18);
+          background: var(--accent);
+          border: 1px solid var(--accent-dark);
           border-radius: 18px;
           padding: 22px 24px;
-          box-shadow: 0 14px 26px rgba(14, 34, 80, 0.18);
+          box-shadow: 0 14px 26px var(--shadow);
         }
 
         .title-section h1 {
@@ -117,12 +118,12 @@ export default function StudentAchievements() {
           font-size: 34px;
           line-height: 1.06;
           letter-spacing: -0.01em;
-          color: #ffffff;
+          color: #fff;
         }
 
         .subtitle {
           margin: 8px 0 0;
-          color: #d6e4ff;
+          color: var(--cream);
           font-size: 14px;
         }
 
@@ -145,23 +146,23 @@ export default function StudentAchievements() {
         }
 
         .btn-primary {
-          background: #ffffff;
-          color: var(--ink);
+          background: #fff;
+          color: var(--accent-dark);
         }
 
         .btn-primary:hover {
-          background: #f0f4ff;
+          background: var(--cream);
           transform: translateY(-1px);
         }
 
         .btn-secondary {
-          background: #dbeafe;
-          color: #0f2347;
-          border: 1px solid #bfdbfe;
+          background: var(--cream);
+          color: var(--accent-dark);
+          border: 1px solid var(--border);
         }
 
         .btn-secondary:hover {
-          background: #bfdbfe;
+          background: var(--border);
           transform: translateY(-1px);
         }
 
@@ -170,10 +171,10 @@ export default function StudentAchievements() {
           gap: 8px;
           margin-bottom: 20px;
           flex-wrap: wrap;
-          background: var(--card);
+          background: #fff;
           padding: 14px;
           border-radius: 14px;
-          border: 1px solid var(--line);
+          border: 1px solid var(--border);
         }
 
         .filter-btn {
@@ -194,7 +195,7 @@ export default function StudentAchievements() {
 
         .filter-btn.active {
           background: var(--mid);
-          color: #ffffff;
+          color: var(--accent-dark);
           border-color: var(--mid);
         }
 
@@ -285,7 +286,7 @@ export default function StudentAchievements() {
         }
 
         .modal {
-          background: var(--card);
+          background: var(--paper);
           border-radius: 18px;
           max-width: 600px;
           width: 100%;
@@ -295,8 +296,8 @@ export default function StudentAchievements() {
         }
 
         .modal-header {
-          background: linear-gradient(140deg, #0f2347 0%, #1d4ed8 100%);
-          color: #ffffff;
+          background: var(--accent);
+          color: #fff;
           padding: 20px 24px;
           border-radius: 18px 18px 0 0;
         }
@@ -308,6 +309,7 @@ export default function StudentAchievements() {
 
         .modal-body {
           padding: 24px;
+          background: var(--paper);
         }
 
         .form-section {
@@ -332,8 +334,8 @@ export default function StudentAchievements() {
           border-radius: 10px;
           padding: 11px 12px;
           font-size: 14px;
-          color: #132e62;
-          background: #ffffff;
+          color: var(--ink);
+          background: var(--paper);
         }
 
         input:focus, select:focus, textarea:focus {
@@ -364,8 +366,8 @@ export default function StudentAchievements() {
         }
 
         .btn-submit {
-          background: var(--mid);
-          color: #ffffff;
+          background: var(--accent);
+          color: #fff;
         }
 
         .btn-submit:hover {
@@ -442,6 +444,7 @@ export default function StudentAchievements() {
                       value={formData.studentName}
                       onChange={handleChange}
                       required
+                      placeholder="Enter student name"
                     />
                   </div>
                   <div className="field">
@@ -452,6 +455,7 @@ export default function StudentAchievements() {
                       value={formData.regNumber}
                       onChange={handleChange}
                       required
+                      placeholder="Enter registration number"
                     />
                   </div>
                   <div className="field">
@@ -462,6 +466,7 @@ export default function StudentAchievements() {
                       value={formData.achievement}
                       onChange={handleChange}
                       required
+                      placeholder="Enter achievement title"
                     />
                   </div>
                   <div className="field">
@@ -491,6 +496,7 @@ export default function StudentAchievements() {
                       value={formData.date}
                       onChange={handleChange}
                       required
+                      placeholder="Select date"
                     />
                   </div>
                   <div className="field">
@@ -501,6 +507,7 @@ export default function StudentAchievements() {
                       value={formData.description}
                       onChange={handleChange}
                       required
+                      placeholder="Describe the achievement"
                     />
                   </div>
                 </div>

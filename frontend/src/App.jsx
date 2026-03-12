@@ -1,14 +1,25 @@
 import "./App.css";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
-import Reports from "./pages/Report";
+import Reports from "./pages/Reports";
 import CreateReport from "./pages/CreateReport";
 import ReportDetails from "./pages/ReportDetails";
 import Register from "./pages/Register";
 import Approvals from "./pages/Approvals";
 import Layout from "./components/Layout";
 
+import Users from "./pages/Users";
+import Departments from "./pages/Departments";
+import AcademicData from "./pages/AcademicData";
+import Research from "./pages/Research";
+import FinancialForm from "./pages/FinancialForm";
+//import InfrastructureForm from "./pages/InfrastructureForm";
+import StudentAchievement from "./pages/StudentAchievement";
+import FacultyAchievement from "./pages/FacultyAchievement";
+import ExtracurricularActivities from "./pages/ExtracurricularActivities";
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import InfrastructureForm from "./pages/InfrastructureForm";
 
 function App() {
   return (
@@ -20,13 +31,18 @@ function App() {
 
         <Route path="/dashboard" element={<Layout />}>
           <Route index element={<Dashboard />} />
-
+          <Route path="users" element={<Users />} />
+          <Route path="departments" element={<Departments />} />
+          <Route path="academic-data" element={<AcademicData />} />
+          <Route path="research" element={<Research />} />
+          <Route path="financial-form" element={<FinancialForm />} />
+          <Route path="infrastructure-form" element={<InfrastructureForm />} />
+          <Route path="student-achievement" element={<StudentAchievement />} />
+          <Route path="faculty-achievement" element={<FacultyAchievement />} />
+          <Route path="extracurricular-activities" element={<ExtracurricularActivities />} />
           <Route path="reports" element={<Reports />} />
-
           <Route path="reports/create" element={<CreateReport />} />
-
           <Route path="reports/:id" element={<ReportDetails />} />
-
           <Route path="approvals" element={<Approvals />} />
         </Route>
       </Routes>
