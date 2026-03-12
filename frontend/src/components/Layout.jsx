@@ -3,122 +3,106 @@ import { useNavigate, useLocation, Link, Outlet } from "react-router-dom";
 
 const NAV_ITEMS = [
   {
-    group: "Main",
-    items: [
-      {
-        label: "Dashboard",
-        path: "/dashboard",
-        icon: (
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <rect x="3" y="3" width="7" height="7" rx="1" />
-            <rect x="14" y="3" width="7" height="7" rx="1" />
-            <rect x="3" y="14" width="7" height="7" rx="1" />
-            <rect x="14" y="14" width="7" height="7" rx="1" />
-          </svg>
-        ),
-      },
-      {
-        label: "Reports",
-        path: "/dashboard/reports",
-        icon: (
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-            <polyline points="14 2 14 8 20 8" />
-            <line x1="16" y1="13" x2="8" y2="13" />
-            <line x1="16" y1="17" x2="8" y2="17" />
-          </svg>
-        ),
-      },
-      {
-        label: "Create Report",
-        path: "/dashboard/reports/create",
-        icon: (
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <circle cx="12" cy="12" r="10" />
-            <line x1="12" y1="8" x2="12" y2="16" />
-            <line x1="8" y1="12" x2="16" y2="12" />
-          </svg>
-        ),
-        accent: true,
-      },
-    ],
+    label: "Dashboard",
+    path: "/dashboard",
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="3" width="7" height="7" rx="1" />
+        <rect x="14" y="3" width="7" height="7" rx="1" />
+        <rect x="3" y="14" width="7" height="7" rx="1" />
+        <rect x="14" y="14" width="7" height="7" rx="1" />
+      </svg>
+    ),
   },
   {
-    group: "Review",
-    items: [
-      {
-        label: "Approvals",
-        path: "/dashboard/approvals",
-        icon: (
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-            <polyline points="22 4 12 14.01 9 11.01" />
-          </svg>
-        ),
-        badge: 3,
-      },
-    ],
+    label: "Users",
+    path: "/dashboard/users",
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+        <circle cx="12" cy="7" r="4" />
+      </svg>
+    ),
   },
   {
-    group: "Insights",
-    items: [
-      {
-        label: "Analytics",
-        path: "/dashboard/analytics",
-        icon: (
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <line x1="18" y1="20" x2="18" y2="10" />
-            <line x1="12" y1="20" x2="12" y2="4" />
-            <line x1="6" y1="20" x2="6" y2="14" />
-          </svg>
-        ),
-      },
-    ],
+    label: "Departments",
+    path: "/dashboard/departments",
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="7" width="18" height="13" rx="2" />
+        <path d="M16 3v4M8 3v4" />
+      </svg>
+    ),
+  },
+  {
+    label: "Academic Data",
+    path: "/dashboard/academic-data",
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+        <rect x="4" y="4" width="16" height="13" rx="2" />
+      </svg>
+    ),
+  },
+  {
+    label: "Research",
+    path: "/dashboard/research",
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M19.428 15.341A8 8 0 1 1 21 12" />
+        <path d="M22 4 12 14.01 9 11.01" />
+      </svg>
+    ),
+  },
+  
+  {
+    label: "Infrastructure",
+    path: "/dashboard/infrastructure",
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="7" width="18" height="13" rx="2" />
+        <path d="M16 3v4M8 3v4" />
+      </svg>
+    ),
+  },
+  {
+    label: "Student Achievement",
+    path: "/dashboard/student-achievement",
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+      </svg>
+    ),
+  },
+  {
+    label: "Faculty Achievement",
+    path: "/dashboard/faculty-achievement",
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="7" r="4" />
+        <path d="M6.5 17h11a2.5 2.5 0 0 1 2.5 2.5V21" />
+      </svg>
+    ),
+  },
+  {
+    label: "Extracurricular Activities",
+    path: "/dashboard/extracurricular-activities",
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+        <circle cx="12" cy="7" r="4" />
+      </svg>
+    ),
+  },
+  {
+    label: "Reports",
+    path: "/dashboard/reports",
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="2" />
+        <path d="M16 3v4M8 3v4" />
+      </svg>
+    ),
   },
 ];
 
@@ -137,7 +121,9 @@ function useUser() {
         role: payload.role || "user",
       };
     }
-  } catch {}
+  } catch (e) {
+    // ignore error
+  }
   return { name: "User", email: "", role: "user" };
 }
 
@@ -167,12 +153,14 @@ export default function Layout() {
       navigate("/login", { replace: true });
       return;
     }
-    setMounted(true);
+    // Use a timeout to avoid cascading renders
+    setTimeout(() => setMounted(true), 0);
   }, [navigate]);
 
   // Close mobile sidebar on route change
   useEffect(() => {
-    setMobileOpen(false);
+    // Use a timeout to avoid cascading renders
+    setTimeout(() => setMobileOpen(false), 0);
   }, [location.pathname]);
 
   // Close user menu on outside click
@@ -197,9 +185,7 @@ export default function Layout() {
   };
 
   // Current page title
-  const currentItem = NAV_ITEMS.flatMap((g) => g.items).find((i) =>
-    isActive(i.path),
-  );
+  const currentItem = NAV_ITEMS.find((i) => isActive(i.path));
   const pageTitle = currentItem?.label || "Dashboard";
 
   if (!mounted) return null;
@@ -229,9 +215,11 @@ export default function Layout() {
 
         .layout-root {
           display: flex;
-          height: 100vh;
+          min-height: 100vh;
+          height: 100dvh;
           font-family: 'DM Sans', sans-serif;
           color: var(--ink);
+          background: linear-gradient(120deg, #f5f2ec 60%, #ede8de 100%);
           overflow: hidden;
         }
 
@@ -243,9 +231,10 @@ export default function Layout() {
           flex-direction: column;
           flex-shrink: 0;
           position: relative;
-          transition: width var(--transition);
+          transition: width var(--transition), box-shadow 0.2s;
           z-index: 50;
           overflow: hidden;
+          box-shadow: 2px 0 16px 0 rgba(0,0,0,0.07);
         }
         .sidebar.collapsed { width: var(--sidebar-collapsed); }
 
@@ -266,31 +255,35 @@ export default function Layout() {
           gap: 0.75rem;
           padding: 0 1.1rem;
           height: var(--navbar-h);
-          border-bottom: 1px solid rgba(255,255,255,0.05);
+          border-bottom: 1px solid rgba(255,255,255,0.08);
           flex-shrink: 0;
           overflow: hidden;
           text-decoration: none;
+          background: rgba(255,255,255,0.02);
         }
         .logo-mark {
-          width: 28px; height: 28px;
-          border-radius: 7px;
-          background: var(--accent);
+          width: 32px; height: 32px;
+          border-radius: 9px;
+          background: linear-gradient(135deg, var(--accent), var(--accent-dk));
           display: flex;
           align-items: center;
           justify-content: center;
           flex-shrink: 0;
           font-family: 'Instrument Serif', serif;
-          font-size: 1rem;
+          font-size: 1.2rem;
           color: #fff;
           font-style: italic;
+          box-shadow: 0 2px 8px 0 rgba(200,82,42,0.10);
         }
         .logo-text {
           font-family: 'Instrument Serif', serif;
-          font-size: 1.1rem;
+          font-size: 1.15rem;
           color: #f5f2ec;
           white-space: nowrap;
           opacity: 1;
+          letter-spacing: 0.03em;
           transition: opacity var(--transition);
+          text-shadow: 0 1px 2px rgba(0,0,0,0.08);
         }
         .sidebar.collapsed .logo-text { opacity: 0; pointer-events: none; }
 
@@ -438,6 +431,7 @@ export default function Layout() {
           flex-direction: column;
           overflow: hidden;
           min-width: 0;
+          background: linear-gradient(120deg, #f5f2ec 80%, #ede8de 100%);
         }
 
         /* ═══════════════ NAVBAR ═══════════════ */
@@ -448,9 +442,10 @@ export default function Layout() {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 0 1.5rem;
+          padding: 0 2.2rem;
           flex-shrink: 0;
           gap: 1rem;
+          box-shadow: 0 2px 8px 0 rgba(0,0,0,0.03);
         }
 
         .navbar-left {
@@ -655,12 +650,22 @@ export default function Layout() {
         .content-area::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
 
         .content-inner {
-          padding: 2rem 2.5rem;
-          max-width: 1200px;
+          padding: 2.5rem 3.5rem 2.5rem 3.5rem;
+          max-width: 1280px;
           min-height: 100%;
+          background: rgba(255,255,255,0.85);
+          border-radius: 18px;
+          margin: 2.5rem auto;
+          box-shadow: 0 4px 32px 0 rgba(200,82,42,0.04);
         }
 
         /* ═══════════════ RESPONSIVE ═══════════════ */
+        @media (max-width: 900px) {
+          .content-inner {
+            padding: 1.5rem 0.5rem;
+            margin: 1.2rem auto;
+          }
+        }
         @media (max-width: 768px) {
           .sidebar {
             position: fixed;
@@ -674,7 +679,10 @@ export default function Layout() {
           .sidebar-toggle { display: none; }
           .mobile-overlay { display: block; }
           .hamburger { display: flex; }
-          .content-inner { padding: 1.5rem 1.25rem; }
+          .content-inner {
+            padding: 1.2rem 0.2rem;
+            margin: 0.5rem auto;
+          }
           .user-name { display: none; }
         }
 
@@ -697,30 +705,22 @@ export default function Layout() {
           {/* Logo */}
           <Link to="/dashboard" className="sidebar-logo">
             <div className="logo-mark">A</div>
-            <span className="logo-text">Atelier</span>
+            <span className="logo-text">Annual report portal</span>
           </Link>
 
           {/* Nav groups */}
           <nav className="sidebar-nav" aria-label="Main navigation">
-            {NAV_ITEMS.map((group) => (
-              <div key={group.group} className="nav-group">
-                <div className="nav-group-label">{group.group}</div>
-                {group.items.map((item) => (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    className={`nav-item ${isActive(item.path) ? "active" : ""} ${item.accent ? "accent-item" : ""}`}
-                    data-tooltip={collapsed ? item.label : undefined}
-                    aria-current={isActive(item.path) ? "page" : undefined}
-                  >
-                    <span className="nav-icon">{item.icon}</span>
-                    <span className="nav-label">{item.label}</span>
-                    {item.badge && (
-                      <span className="nav-badge">{item.badge}</span>
-                    )}
-                  </Link>
-                ))}
-              </div>
+            {NAV_ITEMS.map((item) => (
+              <Link
+                key={item.path}
+                to={item.path}
+                className={`nav-item ${isActive(item.path) ? "active" : ""}`}
+                data-tooltip={collapsed ? item.label : undefined}
+                aria-current={isActive(item.path) ? "page" : undefined}
+              >
+                <span className="nav-icon">{item.icon}</span>
+                <span className="nav-label">{item.label}</span>
+              </Link>
             ))}
           </nav>
 
