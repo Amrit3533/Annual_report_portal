@@ -1,16 +1,15 @@
 const express = require("express");
 const router = express.Router();
+const {
+  getAcademicData,
+  createAcademicData,
+  updateAcademicData,
+  deleteAcademicData
+} = require("../controllers/academicController");
 
-const { verifyToken } = require("../middleware/authMiddleware");
-const { authorizeRoles } = require("../middleware/roleMiddleware");
-
-const { addAcademicData } = require("../controllers/academicController");
-
-router.post(
-    "/",
-    verifyToken,
-    authorizeRoles("faculty", "department", "admin"),
-    addAcademicData
-);
+router.get("/", getAcademicData);
+router.post("/", createAcademicData);
+router.put("/:id", updateAcademicData);
+router.delete("/:id", deleteAcademicData);
 
 module.exports = router;

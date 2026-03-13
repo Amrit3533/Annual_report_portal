@@ -1,6 +1,5 @@
 require("dotenv").config();
 const express = require("express");
-const cors = require("cors");
 const db = require("./config/db");
 const authRoutes = require('./routes/authRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
@@ -11,9 +10,8 @@ const academicRoutes = require("./routes/academicRoutes");
 const dataRoutes = require("./routes/dataRoutes");
 const reportRoutes = require("./routes/reportRoutes");
 
-app.use(cors({
-  origin: "http://localhost:5173"
-}));
+const cors = require("cors");
+app.use(cors());
 app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api', dashboardRoutes);

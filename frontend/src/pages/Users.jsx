@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 
 const API = import.meta.env.VITE_API_URL;
@@ -52,28 +51,120 @@ const responsiveStyles = `
   }
 }
 `;
+import { jwtDecode } from "jwt-decode";
 
 function UserModal({ open, onClose, onSave, initial }) {
-  const [form, setForm] = useState(initial || { name: "", email: "", role: "faculty", password: "" });
-  useEffect(() => { setForm(initial || { name: "", email: "", role: "faculty", password: "" }); }, [initial, open]);
+  const [form, setForm] = useState(
+    initial || { name: "", email: "", role: "faculty", password: "" },
+  );
+  useEffect(() => {
+    setForm(initial || { name: "", email: "", role: "faculty", password: "" });
+  }, [initial, open]);
+
   if (!open) return null;
   return (
-    <div style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", background: "rgba(0,0,0,0.18)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <form style={{ background: "#fff", borderRadius: 12, padding: 32, minWidth: 320, boxShadow: "0 2px 16px 0 rgba(0,0,0,0.10)", display: "flex", flexDirection: "column", gap: 16 }} onSubmit={e => { e.preventDefault(); onSave(form); }}>
-        <h2 style={{ margin: 0, fontSize: 22 }}>{initial ? "Edit User" : "Add User"}</h2>
-        <input required placeholder="Name" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} style={{ padding: 8, borderRadius: 6, border: "1.5px solid #d4cfc5" }} />
-        <input required type="email" placeholder="Email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} style={{ padding: 8, borderRadius: 6, border: "1.5px solid #d4cfc5" }} />
-        <select value={form.role} onChange={e => setForm(f => ({ ...f, role: e.target.value }))} style={{ padding: 8, borderRadius: 6, border: "1.5px solid #d4cfc5" }}>
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100vw",
+        height: "100vh",
+        background: "rgba(0,0,0,0.18)",
+        zIndex: 1000,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <form
+        style={{
+          background: "#fff",
+          borderRadius: 12,
+          padding: 32,
+          minWidth: 320,
+          boxShadow: "0 2px 16px 0 rgba(0,0,0,0.10)",
+          display: "flex",
+          flexDirection: "column",
+          gap: 16,
+        }}
+        onSubmit={(e) => {
+          e.preventDefault();
+          onSave(form);
+        }}
+      >
+        <h2 style={{ margin: 0, fontSize: 22 }}>
+          {initial ? "Edit User" : "Add User"}
+        </h2>
+        <input
+          required
+          placeholder="Name"
+          value={form.name}
+          onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+          style={{ padding: 8, borderRadius: 6, border: "1.5px solid #d4cfc5" }}
+        />
+        <input
+          required
+          type="email"
+          placeholder="Email"
+          value={form.email}
+          onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+          style={{ padding: 8, borderRadius: 6, border: "1.5px solid #d4cfc5" }}
+        />
+        <select
+          value={form.role}
+          onChange={(e) => setForm((f) => ({ ...f, role: e.target.value }))}
+          style={{ padding: 8, borderRadius: 6, border: "1.5px solid #d4cfc5" }}
+        >
           <option value="admin">Admin</option>
           <option value="department">Department</option>
           <option value="faculty">Faculty</option>
           <option value="student">Student</option>
         </select>
-        {!initial && <input required type="password" placeholder="Password" value={form.password} onChange={e => setForm(f => ({ ...f, password: e.target.value }))} style={{ padding: 8, borderRadius: 6, border: "1.5px solid #d4cfc5" }} />}
+        {!initial && (
+          <input
+            required
+            type="password"
+            placeholder="Password"
+            value={form.password}
+            onChange={(e) =>
+              setForm((f) => ({ ...f, password: e.target.value }))
+            }
+            style={{
+              padding: 8,
+              borderRadius: 6,
+              border: "1.5px solid #d4cfc5",
+            }}
+          />
+        )}
         {/* Status field removed */}
         <div style={{ display: "flex", gap: 12, marginTop: 8 }}>
-          <button type="submit" style={{ background: "#c8522a", color: "#fff", border: "none", borderRadius: 6, padding: "8px 18px", fontWeight: 600 }}>{initial ? "Save" : "Add"}</button>
-          <button type="button" onClick={onClose} style={{ background: "#ede8de", color: "#8a8178", border: "none", borderRadius: 6, padding: "8px 18px" }}>Cancel</button>
+          <button
+            type="submit"
+            style={{
+              background: "#c8522a",
+              color: "#fff",
+              border: "none",
+              borderRadius: 6,
+              padding: "8px 18px",
+              fontWeight: 600,
+            }}
+          >
+            {initial ? "Save" : "Add"}
+          </button>
+          <button
+            type="button"
+            onClick={onClose}
+            style={{
+              background: "#ede8de",
+              color: "#8a8178",
+              border: "none",
+              borderRadius: 6,
+              padding: "8px 18px",
+            }}
+          >
+            Cancel
+          </button>
         </div>
       </form>
     </div>
@@ -97,8 +188,8 @@ function Users() {
       const res = await fetch(`${API}/api/users`, {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
       if (!res.ok) throw new Error("Failed to fetch users");
       const data = await res.json();
@@ -110,7 +201,9 @@ function Users() {
     }
   };
 
-  useEffect(() => { fetchUsers(); }, []);
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
   const handleAdd = async (form) => {
     try {
@@ -119,9 +212,9 @@ function Users() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(form)
+        body: JSON.stringify(form),
       });
       if (!res.ok) throw new Error("Failed to add user");
       setModalOpen(false);
@@ -135,17 +228,25 @@ function Users() {
   const handleEdit = async (form) => {
     try {
       const token = localStorage.getItem("token");
-      const { password, ...rest } = form;
+
+      const { id, password, ...rest } = form;
+
       const body = password ? { ...rest, password } : rest;
-      const res = await fetch(`${API}/api/users/${form.id}`, {
+
+      const res = await fetch(`${API}/api/users/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
       });
-      if (!res.ok) throw new Error("Failed to update user");
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.message || "Failed to update user");
+      }
+
       setEditUser(null);
       setModalOpen(false);
       fetchUsers();
@@ -158,85 +259,295 @@ function Users() {
   const handleDelete = async (id) => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`${API}/api/users/${id}`, {
-        method: "DELETE",
+
+      const res = await fetch(`${API}/api/users/${id}/disable`, {
+        method: "PUT",
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
-      if (!res.ok) throw new Error("Failed to delete user");
+
+      if (!res.ok) throw new Error("Failed to disable user");
+
       setDeleteId(null);
       setConfirmDelete(false);
-      fetchUsers();
+      setUsers((prev) => prev.filter((u) => u.id !== id));
     } catch (err) {
       alert(err.message);
     }
   };
+  const token = localStorage.getItem("token");
+  const currentUser = token ? jwtDecode(token) : null;
 
   return (
     <>
       <style>{responsiveStyles}</style>
-      <div className="users-container" style={{
-        padding: "2.5rem 3.5rem",
-        maxWidth: 1280,
-        margin: "0 auto",
-        minHeight: "calc(100vh - 64px)",
-        background: "#f5f2ec",
-        width: "100%"
-      }}>
-        <div className="users-card" style={{
-          background: "#fff",
-          borderRadius: 12,
-          boxShadow: "0 2px 12px 0 rgba(0,0,0,0.07)",
-          padding: "2rem 2.5rem 2.5rem 2.5rem",
-          marginTop: 32,
-          minHeight: 500,
+      <div
+        className="users-container"
+        style={{
+          padding: "2.5rem 3.5rem",
+          maxWidth: 1280,
+          margin: "0 auto",
+          minHeight: "calc(100vh - 64px)",
+          background: "#f5f2ec",
           width: "100%",
-          maxWidth: "100%"
-        }}>
-          <div className="users-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 32 }}>
-            <h1 style={{ fontSize: "2.2rem", fontWeight: 700, letterSpacing: "0.02em", margin: 0 }}>User Management</h1>
-            <button onClick={() => { setModalOpen(true); setEditUser(null); }} style={{ background: "linear-gradient(90deg,#5b5bf7,#a0401e)", color: "#fff", border: "none", borderRadius: 8, padding: "12px 28px", fontWeight: 600, fontSize: 16, boxShadow: "0 2px 8px 0 rgba(90,90,90,0.07)" }}>+ Add User</button>
+        }}
+      >
+        <div
+          className="users-card"
+          style={{
+            background: "#fff",
+            borderRadius: 12,
+            boxShadow: "0 2px 12px 0 rgba(0,0,0,0.07)",
+            padding: "2rem 2.5rem 2.5rem 2.5rem",
+            marginTop: 32,
+            minHeight: 500,
+            width: "100%",
+            maxWidth: "100%",
+          }}
+        >
+          <div
+            className="users-header"
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 32,
+            }}
+          >
+            <h1
+              style={{
+                fontSize: "2.2rem",
+                fontWeight: 700,
+                letterSpacing: "0.02em",
+                margin: 0,
+              }}
+            >
+              User Management
+            </h1>
+            {currentUser?.role === "admin" && (
+              <button
+                onClick={() => {
+                  setModalOpen(true);
+                  setEditUser(null);
+                }}
+                style={{
+                  background: "linear-gradient(90deg,#5b5bf7,#a0401e)",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: 8,
+                  padding: "12px 28px",
+                  fontWeight: 600,
+                  fontSize: 16,
+                  boxShadow: "0 2px 8px 0 rgba(90,90,90,0.07)",
+                }}
+              >
+                + Add User
+              </button>
+            )}
           </div>
-          {error && <div style={{ color: "#a0401e", marginBottom: 16 }}>{error}</div>}
+          {error && (
+            <div style={{ color: "#a0401e", marginBottom: 16 }}>{error}</div>
+          )}
           <div style={{ overflowX: "auto", width: "100%" }}>
-            <table className="users-table" style={{ width: "100%", borderCollapse: "collapse", fontSize: 16, background: "#fff", minWidth: 600 }}>
+            <table
+              className="users-table"
+              style={{
+                width: "100%",
+                borderCollapse: "collapse",
+                fontSize: 16,
+                background: "#fff",
+                minWidth: 600,
+              }}
+            >
               <thead style={{ background: "#f5f2ec" }}>
                 <tr>
-                  <th style={{ padding: "16px 18px", textAlign: "left", fontWeight: 600, color: "#222" }}>Name</th>
-                  <th style={{ padding: "16px 18px", textAlign: "left", fontWeight: 600, color: "#222" }}>Role</th>
-                  <th style={{ padding: "16px 18px", textAlign: "left", fontWeight: 600, color: "#222" }}>Email</th>
-                  <th style={{ padding: "16px 18px", textAlign: "right", fontWeight: 600, color: "#222" }}>Actions</th>
+                  <th
+                    style={{
+                      padding: "16px 18px",
+                      textAlign: "left",
+                      fontWeight: 600,
+                      color: "#222",
+                    }}
+                  >
+                    Name
+                  </th>
+                  <th
+                    style={{
+                      padding: "16px 18px",
+                      textAlign: "left",
+                      fontWeight: 600,
+                      color: "#222",
+                    }}
+                  >
+                    Role
+                  </th>
+                  <th
+                    style={{
+                      padding: "16px 18px",
+                      textAlign: "left",
+                      fontWeight: 600,
+                      color: "#222",
+                    }}
+                  >
+                    Email
+                  </th>
+                  <th
+                    style={{
+                      padding: "16px 18px",
+                      textAlign: "right",
+                      fontWeight: 600,
+                      color: "#222",
+                    }}
+                  >
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {loading ? (
-                  <tr><td colSpan={4} style={{ padding: 40, textAlign: "center" }}>Loading...</td></tr>
-                ) : users.length === 0 ? (
-                  <tr><td colSpan={4} style={{ padding: 40, textAlign: "center" }}>No users found.</td></tr>
-                ) : users.map(user => (
-                  <tr key={user.id} style={{ borderBottom: "1px solid #ede8de" }}>
-                    <td style={{ padding: "14px 18px" }}>{user.name}</td>
-                    <td style={{ padding: "14px 18px" }}>{user.role}</td>
-                    <td style={{ padding: "14px 18px" }}>{user.email}</td>
-                    <td style={{ padding: "14px 18px", textAlign: "right" }}>
-                      <button onClick={() => { setEditUser(user); setModalOpen(true); }} style={{ background: "#ede8de", color: "#5b5bf7", border: "none", borderRadius: 6, padding: "6px 14px", marginRight: 8, fontWeight: 600, fontSize: 15 }}>Edit</button>
-                      <button onClick={() => { setDeleteId(user.id); setConfirmDelete(true); }} style={{ background: "#fff0f0", color: "#a0401e", border: "none", borderRadius: 6, padding: "6px 14px", fontWeight: 600, fontSize: 15 }}>Delete</button>
+                  <tr>
+                    <td
+                      colSpan={4}
+                      style={{ padding: 40, textAlign: "center" }}
+                    >
+                      Loading...
                     </td>
                   </tr>
-                ))}
+                ) : users.length === 0 ? (
+                  <tr>
+                    <td
+                      colSpan={4}
+                      style={{ padding: 40, textAlign: "center" }}
+                    >
+                      No users found.
+                    </td>
+                  </tr>
+                ) : (
+                  users.map((user) => (
+                    <tr
+                      key={user.id}
+                      style={{ borderBottom: "1px solid #ede8de" }}
+                    >
+                      <td style={{ padding: "14px 18px" }}>{user.name}</td>
+                      <td style={{ padding: "14px 18px" }}>{user.role}</td>
+                      <td style={{ padding: "14px 18px" }}>{user.email}</td>
+                      <td style={{ padding: "14px 18px", textAlign: "right" }}>
+                        <button
+                          onClick={() => {
+                            setEditUser(user);
+                            setModalOpen(true);
+                          }}
+                          style={{
+                            background: "#ede8de",
+                            color: "#5b5bf7",
+                            border: "none",
+                            borderRadius: 6,
+                            padding: "6px 14px",
+                            marginRight: 8,
+                            fontWeight: 600,
+                            fontSize: 15,
+                          }}
+                        >
+                          Edit
+                        </button>
+                        {currentUser?.id !== user.id && (
+                          <button
+                            onClick={() => {
+                              setDeleteId(user.id);
+                              setConfirmDelete(true);
+                            }}
+                            style={{
+                              background: "#fff0f0",
+                              color: "#a0401e",
+                              border: "none",
+                              borderRadius: 6,
+                              padding: "6px 14px",
+                              fontWeight: 600,
+                              fontSize: 15,
+                            }}
+                          >
+                            Disable
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
         </div>
-        <UserModal open={modalOpen} onClose={() => { setModalOpen(false); setEditUser(null); }} onSave={editUser ? handleEdit : handleAdd} initial={editUser} />
+        <UserModal
+          open={modalOpen}
+          onClose={() => {
+            setModalOpen(false);
+            setEditUser(null);
+          }}
+          onSave={editUser ? handleEdit : handleAdd}
+          initial={editUser}
+        />
         {confirmDelete && (
-          <div style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", background: "rgba(0,0,0,0.18)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <div style={{ background: "#fff", borderRadius: 12, padding: 32, minWidth: 320, boxShadow: "0 2px 16px 0 rgba(0,0,0,0.10)", display: "flex", flexDirection: "column", gap: 16 }}>
-              <div style={{ fontSize: 18, marginBottom: 12 }}>Are you sure you want to delete this user?</div>
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100vw",
+              height: "100vh",
+              background: "rgba(0,0,0,0.18)",
+              zIndex: 1000,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <div
+              style={{
+                background: "#fff",
+                borderRadius: 12,
+                padding: 32,
+                minWidth: 320,
+                boxShadow: "0 2px 16px 0 rgba(0,0,0,0.10)",
+                display: "flex",
+                flexDirection: "column",
+                gap: 16,
+              }}
+            >
+              <div style={{ fontSize: 18, marginBottom: 12 }}>
+                Are you sure you want to disable this user?
+              </div>
               <div style={{ display: "flex", gap: 12 }}>
-                <button onClick={() => handleDelete(deleteId)} style={{ background: "#a0401e", color: "#fff", border: "none", borderRadius: 6, padding: "8px 18px", fontWeight: 600 }}>Delete</button>
-                <button onClick={() => { setDeleteId(null); setConfirmDelete(false); }} style={{ background: "#ede8de", color: "#8a8178", border: "none", borderRadius: 6, padding: "8px 18px" }}>Cancel</button>
+                {currentUser?.id !== deleteId && (
+                  <button
+                    onClick={() => handleDelete(deleteId)}
+                    style={{
+                      background: "#a0401e",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: 6,
+                      padding: "8px 18px",
+                      fontWeight: 600,
+                    }}
+                  >
+                    Disable
+                  </button>
+                )}
+                <button
+                  onClick={() => {
+                    setDeleteId(null);
+                    setConfirmDelete(false);
+                  }}
+                  style={{
+                    background: "#ede8de",
+                    color: "#8a8178",
+                    border: "none",
+                    borderRadius: 6,
+                    padding: "8px 18px",
+                  }}
+                >
+                  Cancel
+                </button>
               </div>
             </div>
           </div>
@@ -247,4 +558,3 @@ function Users() {
 }
 
 export default Users;
-

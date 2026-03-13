@@ -28,7 +28,6 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-
         <Route path="/dashboard" element={<Layout />}>
           <Route index element={<Dashboard />} />
           <Route path="users" element={<Users />} />
@@ -36,7 +35,7 @@ function App() {
           <Route path="academic-data" element={<AcademicData />} />
           <Route path="research" element={<Research />} />
           <Route path="financial-form" element={<FinancialForm />} />
-          <Route path="infrastructure-form" element={<InfrastructureForm />} />
+          <Route path="infrastructure" element={<InfrastructureForm />} />
           <Route path="student-achievement" element={<StudentAchievement />} />
           <Route path="faculty-achievement" element={<FacultyAchievement />} />
           <Route path="extracurricular-activities" element={<ExtracurricularActivities />} />

@@ -155,21 +155,7 @@ export default function Reports() {
     setMounted(true);
   }, [navigate]);
 
-  useEffect(() => {
-    if (mounted) fetchReports();
-  }, [mounted, page, filterStatus, filterYear, sortBy, fetchReports]);
-
-  // Debounced search
-  useEffect(() => {
-    if (!mounted) return;
-    const t = setTimeout(() => {
-      setPage(1);
-      fetchReports();
-    }, 350);
-    return () => clearTimeout(t);
-  }, [search, fetchReports, mounted]);
-
-  const fetchReports = useCallback(async () => {
+    const fetchReports = useCallback(async () => {
     setLoading(true);
     setError("");
     try {
@@ -214,6 +200,22 @@ export default function Reports() {
       setLoading(false);
     }
   }, [page, search, filterStatus, filterYear, sortBy, navigate]);
+
+  useEffect(() => {
+    if (mounted) fetchReports();
+  }, [mounted, page, filterStatus, filterYear, sortBy, fetchReports]);
+
+  // Debounced search
+  useEffect(() => {
+    if (!mounted) return;
+    const t = setTimeout(() => {
+      setPage(1);
+      fetchReports();
+    }, 350);
+    return () => clearTimeout(t);
+  }, [search, fetchReports, mounted]);
+
+
 
   const showToast = (type, message) => {
     setToast({ type, message });

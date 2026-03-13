@@ -4,9 +4,9 @@ const { verifyToken } = require("../middleware/authMiddleware");
 const { authorizeRoles } = require("../middleware/roleMiddleware");
 const reportGenerator = require('../controllers/reportGenerator');
 const { createReport, fetchReport} = require("../controllers/reportController");
-const { updateReportStatus } = require("../controllers/userController");
+const { updateReportStatus } = require("../controllers/reportController");
 
-router.post(
+router.post(  
   "/",
   verifyToken,
   authorizeRoles("admin", "department", "faculty"),
@@ -15,8 +15,8 @@ router.post(
 
 router.get(
   "/",
-  verifyToken,
-  authorizeRoles("admin", "department", "faculty"),
+  // verifyToken,
+  // authorizeRoles("admin", "department", "faculty"),
   fetchReport,
 );
 
