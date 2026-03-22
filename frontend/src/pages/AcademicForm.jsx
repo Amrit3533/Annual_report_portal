@@ -806,7 +806,7 @@ export default function AcademicForm() {
               </div>
               <div className="tip-list">
                 {[
-                  "Use numbers where possible — e.g. "642 graduates" is clearer than "many graduates".",
+                  //"Use numbers where possible — e.g. "642 graduates" is clearer than "many graduates".",
                   "Your draft is autosaved every 2 seconds while you type.",
                   "You can return and edit this section at any time before the report is submitted.",
                 ].map((tip, i) => (

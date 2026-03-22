@@ -1,4 +1,6 @@
-const activities = [
+import React, { useState } from "react";
+
+const initialActivities = [
   {
     title: "Tech Symposium 2026",
     date: "Mar 20, 2026",
@@ -37,7 +39,63 @@ const activities = [
   },
 ];
 
+function AddActivityModal({ open, onClose, onAdd }) {
+  const [form, setForm] = useState({
+    title: "",
+    date: "",
+    category: "",
+    description: "",
+  });
+  React.useEffect(() => {
+    if (open) setForm({ title: "", date: "", category: "", description: "" });
+  }, [open]);
+  if (!open) return null;
+  return (
+    <div style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", background: "rgba(0,0,0,0.18)", zIndex: 2000, display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <form
+        onSubmit={e => { e.preventDefault(); onAdd(form); }}
+        style={{ background: "#fff", borderRadius: 18, minWidth: 320, maxWidth: 400, width: "90vw", boxShadow: "0 2px 16px 0 rgba(0,0,0,0.10)", display: "flex", flexDirection: "column", gap: 0, padding: 0 }}
+        autoComplete="off"
+      >
+        <div style={{ background: "linear-gradient(90deg,#5b5bf7,#a0401e)", borderTopLeftRadius: 18, borderTopRightRadius: 18, padding: "20px 24px 12px 24px", color: "#fff", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <span style={{ fontSize: 22, fontWeight: 700 }}>Add Activity</span>
+          <button type="button" onClick={onClose} style={{ background: "none", border: "none", color: "#fff", fontSize: 24, cursor: "pointer" }}>&#10005;</button>
+        </div>
+        <div style={{ padding: "20px 24px 0 24px", display: "flex", flexDirection: "column", gap: 14 }}>
+          <input required placeholder="Title" value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} style={inputStyle} />
+          <input required placeholder="Date (e.g. Mar 20, 2026)" value={form.date} onChange={e => setForm(f => ({ ...f, date: e.target.value }))} style={inputStyle} />
+          <input required placeholder="Category" value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value }))} style={inputStyle} />
+          <textarea required placeholder="Description" value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} style={{ ...inputStyle, minHeight: 60, resize: "vertical" }} />
+        </div>
+        <div style={{ display: "flex", gap: 14, justifyContent: "center", padding: "0 0 20px 0", marginTop: 14 }}>
+          <button type="button" onClick={onClose} style={{ background: "#fff", color: "#444", border: "1.5px solid #e0e0e0", borderRadius: 8, padding: "10px 24px", fontWeight: 600, fontSize: 16, cursor: "pointer", minWidth: 90 }}>Cancel</button>
+          <button type="submit" style={{ background: "linear-gradient(90deg,#5b5bf7,#a0401e)", color: "#fff", border: "none", borderRadius: 8, padding: "10px 24px", fontWeight: 600, fontSize: 16, cursor: "pointer", minWidth: 120 }}>Add Activity</button>
+        </div>
+      </form>
+    </div>
+  );
+}
+
+const inputStyle = {
+  padding: "12px 14px",
+  borderRadius: 8,
+  border: "1.5px solid #e0e0e0",
+  fontSize: 15,
+  outline: "none",
+  fontWeight: 500,
+  background: "#fafbfc",
+  marginBottom: 0,
+  width: "100%",
+  boxSizing: "border-box",
+};
+
 export default function ExtracurricularActivities() {
+  const [activities, setActivities] = useState(initialActivities);
+  const [modalOpen, setModalOpen] = useState(false);
+  const handleAddActivity = (form) => {
+    setActivities(prev => [{ ...form }, ...prev]);
+    setModalOpen(false);
+  };
   return (
     <>
       <style>{`
@@ -201,11 +259,11 @@ export default function ExtracurricularActivities() {
               <h1 className="title">Extracurricular Activities</h1>
               <p className="subtitle">Upcoming events, workshops, and student programs</p>
             </div>
+            <button onClick={() => setModalOpen(true)} style={{ background: "linear-gradient(90deg,#5b5bf7,#a0401e)", color: "#fff", border: "none", borderRadius: 10, padding: "12px 24px", fontWeight: 600, fontSize: 16, cursor: "pointer", marginLeft: 12 }}>+ Add Activity</button>
           </div>
-
           <section className="grid">
             {activities.map((activity) => (
-              <article className="card" key={activity.title}>
+              <article className="card" key={activity.title + activity.date}>
                 <span className="badge">{activity.category}</span>
                 <h3>{activity.title}</h3>
                 <p className="date">{activity.date}</p>
@@ -214,6 +272,7 @@ export default function ExtracurricularActivities() {
             ))}
           </section>
         </div>
+        <AddActivityModal open={modalOpen} onClose={() => setModalOpen(false)} onAdd={handleAddActivity} />
       </main>
     </>
   );
