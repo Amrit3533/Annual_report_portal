@@ -13,13 +13,12 @@ import Departments from "./pages/Departments";
 import AcademicData from "./pages/AcademicData";
 import Research from "./pages/Research";
 import FinancialForm from "./pages/FinancialForm";
-//import InfrastructureForm from "./pages/InfrastructureForm";
 import StudentAchievement from "./pages/StudentAchievement";
 import FacultyAchievement from "./pages/FacultyAchievement";
 import ExtracurricularActivities from "./pages/ExtracurricularActivities";
 import AcademicForm from "./pages/AcademicForm";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import InfrastructureForm from "./pages/InfrastructureForm";
+import Infrastructure from "./pages/Infrastructure";
 
 function App() {
   return (
@@ -28,6 +27,7 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+       
         <Route path="/dashboard" element={<Layout />}>
           <Route index element={<Dashboard />} />
           <Route path="users" element={<Users />} />
@@ -35,7 +35,6 @@ function App() {
           <Route path="academic-data" element={<AcademicData />} />
           <Route path="research" element={<Research />} />
           <Route path="financial-form" element={<FinancialForm />} />
-          <Route path="infrastructure" element={<InfrastructureForm />} />
           <Route path="student-achievement" element={<StudentAchievement />} />
           <Route path="faculty-achievement" element={<FacultyAchievement />} />
           <Route path="extracurricular-activities" element={<ExtracurricularActivities />} />
@@ -43,7 +42,8 @@ function App() {
           <Route path="reports/create" element={<CreateReport />} />
           <Route path="reports/:id" element={<ReportDetails />} />
           <Route path="approvals" element={<Approvals />} /> 
-                   <Route path="academicForm" element={<AcademicForm/>}></Route>
+          <Route path="academicForm" element={<AcademicForm/>}></Route>
+          <Route path="infrastructure" element={<Infrastructure/>}></Route>
         </Route>
       </Routes>
     </Router>
