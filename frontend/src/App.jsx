@@ -17,7 +17,7 @@ import FinancialForm from "./pages/FinancialForm";
 import StudentAchievement from "./pages/StudentAchievement";
 import FacultyAchievement from "./pages/FacultyAchievement";
 import ExtracurricularActivities from "./pages/ExtracurricularActivities";
-
+import AcademicForm from "./pages/AcademicForm";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import InfrastructureForm from "./pages/InfrastructureForm";
 
@@ -42,7 +42,8 @@ function App() {
           <Route path="reports" element={<Reports />} />
           <Route path="reports/create" element={<CreateReport />} />
           <Route path="reports/:id" element={<ReportDetails />} />
-          <Route path="approvals" element={<Approvals />} />
+          <Route path="approvals" element={<Approvals />} /> 
+                   <Route path="academicForm" element={<AcademicForm/>}></Route>
         </Route>
       </Routes>
     </Router>

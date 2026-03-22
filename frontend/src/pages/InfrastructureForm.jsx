@@ -46,41 +46,52 @@ export default function InfrastructureForm() {
         * { box-sizing: border-box; }
 
         :root {
-          --ink: #0f2347;
-          --mid: #1d4ed8;
-          --mid-dark: #1e40af;
-          --sky: #eff6ff;
-          --line: #d6e3ff;
-          --muted: #516487;
-          --card: #ffffff;
+          --ink: #0f0f0f;
+          --paper: #f5f2ec;
+          --cream: #ede8de;
+          --accent: #c8522a;
+          --accent-dark: #a0401e;
+          --muted: #8a8178;
+          --border: #e0e0e0;
+          --card: #fff;
         }
 
         .infra-page {
           min-height: 100vh;
+          width: 100vw;
           background:
-            radial-gradient(circle at 8% 12%, rgba(59, 130, 246, 0.2), transparent 35%),
-            radial-gradient(circle at 88% 2%, rgba(29, 78, 216, 0.22), transparent 32%),
-            linear-gradient(180deg, #eaf1ff 0%, #dfeafe 100%);
+            radial-gradient(circle at 8% 12%, rgba(200, 82, 42, 0.08), transparent 35%),
+            radial-gradient(circle at 88% 2%, rgba(160, 64, 30, 0.10), transparent 32%),
+            linear-gradient(180deg, #f5f2ec 0%, #ede8de 100%);
           color: var(--ink);
           font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-          padding: 28px 14px;
+          padding: 0;
           overflow-y: auto;
+          box-sizing: border-box;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
         }
 
         .infra-shell {
+          width: 100%;
           max-width: 980px;
+          min-height: 100vh;
           margin: 0 auto;
           background: var(--card);
-          border: 1px solid var(--line);
-          border-radius: 18px;
-          box-shadow: 0 14px 28px rgba(20, 40, 80, 0.12);
-          overflow: hidden;
+          border: 1.5px solid var(--border);
+          border-radius: 20px;
+          box-shadow: 0 14px 28px rgba(200, 82, 42, 0.08);
+          overflow: visible;
+          display: flex;
+          flex-direction: column;
         }
 
         .infra-header {
-          background: linear-gradient(140deg, #0f2347 0%, #1d4ed8 100%);
-          color: #ffffff;
-          padding: 28px 24px;
+          background: linear-gradient(90deg, #5b5bf7 0%, #a0401e 100%);
+          color: #fff;
+          padding: 32px 28px;
         }
 
         .infra-header h1 {
@@ -97,35 +108,41 @@ export default function InfrastructureForm() {
         }
 
         .infra-body {
-          padding: 24px;
-          display: grid;
-          gap: 22px;
+          padding: 28px;
+          display: flex;
+          flex-direction: column;
+          gap: 32px;
         }
 
         .section {
-          border: 1px solid var(--line);
-          border-radius: 14px;
-          padding: 16px;
-          background: #f8fbff;
-          box-shadow: 0 6px 16px rgba(16, 38, 84, 0.06);
+          border: 1.5px solid var(--border);
+          border-radius: 16px;
+          padding: 24px 18px 18px 18px;
+          background: #fff;
+          box-shadow: 0 6px 16px rgba(200, 82, 42, 0.06);
+          margin-bottom: 0;
         }
 
         .section h2 {
-          margin: 0 0 14px;
-          font-size: 20px;
-          color: #16356e;
+          margin: 0 0 18px 0;
+          font-size: 22px;
+          color: #a0401e;
+          font-weight: 700;
+          letter-spacing: -0.5px;
         }
 
         .grid {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 14px;
+          gap: 24px 18px;
+          align-items: start;
         }
 
         .field {
           display: flex;
           flex-direction: column;
           gap: 6px;
+          justify-content: flex-start;
         }
 
         .field.full-width {
@@ -135,18 +152,18 @@ export default function InfrastructureForm() {
         label {
           font-size: 13px;
           font-weight: 700;
-          color: #16356e;
+          color: #a0401e;
         }
 
         input,
         select,
         textarea {
-          border: 1px solid #b9cfff;
+          border: 1.5px solid var(--border);
           border-radius: 8px;
-          padding: 9px 12px;
-          font-size: 14px;
+          padding: 10px 13px;
+          font-size: 15px;
           font-family: inherit;
-          background: #ffffff;
+          background: #fafbfc;
           color: var(--ink);
           transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
@@ -155,8 +172,8 @@ export default function InfrastructureForm() {
         select:focus,
         textarea:focus {
           outline: none;
-          border-color: var(--mid);
-          box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.1);
+          border-color: #a0401e;
+          box-shadow: 0 0 0 3px rgba(200, 82, 42, 0.08);
         }
 
         textarea {
@@ -166,7 +183,7 @@ export default function InfrastructureForm() {
 
         .success-msg {
           background: #d1fae5;
-          border: 1px solid #6ee7b7;
+          border: 1.5px solid #6ee7b7;
           color: #065f46;
           padding: 12px 16px;
           border-radius: 10px;
@@ -176,23 +193,24 @@ export default function InfrastructureForm() {
         .actions {
           display: flex;
           justify-content: flex-end;
-          padding-top: 6px;
+          padding-top: 16px;
         }
 
         button {
           border: none;
-          background: var(--mid);
-          color: #ffffff;
-          font-size: 14px;
+          background: linear-gradient(90deg, #5b5bf7 0%, #a0401e 100%);
+          color: #fff;
+          font-size: 15px;
           font-weight: 700;
-          border-radius: 10px;
-          padding: 11px 20px;
+          border-radius: 12px;
+          padding: 12px 26px;
           cursor: pointer;
           transition: transform 0.15s ease, background 0.2s ease;
+          min-width: 180px;
         }
 
         button:hover:not(:disabled) {
-          background: var(--mid-dark);
+          background: linear-gradient(90deg, #a0401e 0%, #5b5bf7 100%);
           transform: translateY(-1px);
         }
 
@@ -201,12 +219,22 @@ export default function InfrastructureForm() {
           cursor: not-allowed;
         }
 
+        @media (max-width: 900px) {
+          .infra-shell { max-width: 100%; width: 100%; }
+          .infra-header { padding: 24px 12px; }
+          .infra-body { padding: 12px; }
+        }
+
         @media (max-width: 760px) {
-          .infra-page { padding: 10px; }
-          .infra-header { padding: 20px 16px; }
-          .infra-header h1 { font-size: 24px; }
-          .infra-body { padding: 14px; }
-          .grid { grid-template-columns: 1fr; }
+          .infra-page { padding: 0; width: 100vw; overflow-y: auto; }
+          .infra-shell { border-radius: 0; min-height: 100vh; }
+          .infra-header { padding: 16px 6px; }
+          .infra-header h1 { font-size: 22px; }
+          .infra-body { padding: 6px; }
+          .section { padding: 8px; }
+          .grid { grid-template-columns: 1fr; gap: 18px; }
+          .actions { justify-content: stretch; }
+          button { width: 100%; min-width: unset; }
         }
       `}</style>
 
