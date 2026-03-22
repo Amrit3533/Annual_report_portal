@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import { useEffect, useState } from "react";
 
 const API = import.meta.env.VITE_API_URL;
 const responsiveStyles = `
@@ -51,7 +52,6 @@ const responsiveStyles = `
   }
 }
 `;
-import { jwtDecode } from "jwt-decode";
 
 function UserModal({ open, onClose, onSave, initial }) {
   const [form, setForm] = useState(
