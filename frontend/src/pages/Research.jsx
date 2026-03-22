@@ -8,11 +8,8 @@ const initialPublications = [
     journal: "AI Journal",
     year: 2025,
     doi: "https://doi.org/10.1234/ai.2025.001",
-    indexing: "Scopus",
     department: "Computer Science",
-    abstract: "A study on deep learning methods...",
-    file: null,
-    tags: ["AI", "Deep Learning"]
+    file: null
   }
 ];
 
@@ -23,16 +20,17 @@ function AddPublicationModal({ open, onClose, onAdd, existing }) {
     journal: "",
     year: "",
     doi: "",
-    indexing: "",
     department: "",
-    abstract: "",
     file: null,
-    tags: "",
   });
   const [dupHint, setDupHint] = useState("");
   React.useEffect(() => {
-    if (open) setForm({ title: "", authors: [""], journal: "", year: "", doi: "", indexing: "", department: "", abstract: "", file: null, tags: "" });
-    setDupHint("");
+    if (open) {
+      setForm({ title: "", authors: [""], journal: "", year: "", doi: "", department: "", file: null });
+      setDupHint("");
+    }
+    // Only reset when modal is opened, not on every render
+    // eslint-disable-next-line
   }, [open]);
   React.useEffect(() => {
     if (!form.title) return setDupHint("");
@@ -53,25 +51,22 @@ function AddPublicationModal({ open, onClose, onAdd, existing }) {
           <button type="button" onClick={onClose} style={{ background: "none", border: "none", color: "#fff", fontSize: 24, cursor: "pointer" }}>&#10005;</button>
         </div>
         <div style={{ padding: "20px 24px 0 24px", display: "flex", flexDirection: "column", gap: 12, maxHeight: 400, overflowY: "auto" }}>
-          <input required placeholder="Title" value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} style={inputStyle} />
+          <input required placeholder="Title" value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} style={inputStyle} autoFocus />
           <div>
             <label style={{ fontWeight: 500 }}>Authors</label>
             {form.authors.map((a, i) => (
               <div key={i} style={{ display: "flex", gap: 6, marginBottom: 4 }}>
-                <input required placeholder={`Author ${i+1}`} value={a} onChange={e => setForm(f => ({ ...f, authors: f.authors.map((x, j) => j === i ? e.target.value : x) }))} style={{ ...inputStyle, flex: 1 }} />
+                <input required placeholder={`Author ${i+1}`} value={a} onChange={e => setForm(f => ({ ...f, authors: f.authors.map((x, j) => j === i ? e.target.value : x) }))} style={{ ...inputStyle, flex: 1 }} autoFocus={i === 0} />
                 {form.authors.length > 1 && <button type="button" onClick={() => setForm(f => ({ ...f, authors: f.authors.filter((_, j) => j !== i) }))} style={removeBtnStyle}>-</button>}
                 {i === form.authors.length - 1 && <button type="button" onClick={() => setForm(f => ({ ...f, authors: [...f.authors, ""] }))} style={addBtnStyle}>+</button>}
               </div>
             ))}
           </div>
-          <input required placeholder="Journal/Conference" value={form.journal} onChange={e => setForm(f => ({ ...f, journal: e.target.value }))} style={inputStyle} />
+          <input required placeholder="Journal/Conference" type="text" value={form.journal} onChange={e => setForm(f => ({ ...f, journal: e.target.value }))} style={inputStyle} />
           <input required placeholder="Year" type="number" min="1900" max={new Date().getFullYear()} value={form.year} onChange={e => setForm(f => ({ ...f, year: e.target.value }))} style={inputStyle} />
           <input placeholder="DOI/URL" value={form.doi} onChange={e => setForm(f => ({ ...f, doi: e.target.value }))} style={inputStyle} />
-          <input placeholder="Indexing" value={form.indexing} onChange={e => setForm(f => ({ ...f, indexing: e.target.value }))} style={inputStyle} />
           <input placeholder="Department" value={form.department} onChange={e => setForm(f => ({ ...f, department: e.target.value }))} style={inputStyle} />
-          <textarea placeholder="Abstract" value={form.abstract} onChange={e => setForm(f => ({ ...f, abstract: e.target.value }))} style={{ ...inputStyle, minHeight: 50, resize: "vertical" }} />
           <input type="file" accept="application/pdf" onChange={e => setForm(f => ({ ...f, file: e.target.files[0] }))} style={inputStyle} />
-          <input placeholder="Tags (comma separated)" value={form.tags} onChange={e => setForm(f => ({ ...f, tags: e.target.value }))} style={inputStyle} />
           {dupHint && <div style={{ color: "#b91c1c", fontWeight: 500, fontSize: 13, marginTop: 2 }}>{dupHint}</div>}
         </div>
         <div style={{ display: "flex", gap: 14, justifyContent: "center", padding: "0 0 20px 0", marginTop: 14 }}>
@@ -91,12 +86,13 @@ const inputStyle = {
   outline: "none",
   fontWeight: 500,
   background: "#fafbfc",
+  color: "#222", // Ensure text is visible
   marginBottom: 0,
   width: "100%",
   boxSizing: "border-box",
 };
-const addBtnStyle = { background: '#e0e7ff', color: '#222', border: 'none', borderRadius: 6, fontWeight: 700, fontSize: 18, width: 28, height: 28, cursor: 'pointer' };
-const removeBtnStyle = { background: '#fee2e2', color: '#b91c1c', border: 'none', borderRadius: 6, fontWeight: 700, fontSize: 18, width: 28, height: 28, cursor: 'pointer' };
+const addBtnStyle = { background: '#e0e7ff', color: '#222', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 24, width: 40, height: 40, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0 };
+const removeBtnStyle = { background: '#fee2e2', color: '#b91c1c', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 24, width: 40, height: 40, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0 };
 
 export default function Research() {
   const [publications, setPublications] = useState(initialPublications);
@@ -106,7 +102,7 @@ export default function Research() {
 
   const handleAddPublication = (form) => {
     setPublications(prev => [
-      { ...form, tags: form.tags.split(',').map(t => t.trim()).filter(Boolean) },
+      { ...form },
       ...prev
     ]);
     setModalOpen(false);
@@ -150,9 +146,7 @@ export default function Research() {
                 <th style={thStyle}>Journal/Conference</th>
                 <th style={thStyle}>Year</th>
                 <th style={thStyle}>DOI/URL</th>
-                <th style={thStyle}>Indexing</th>
                 <th style={thStyle}>Department</th>
-                <th style={thStyle}>Tags</th>
                 <th style={thStyle}>PDF</th>
               </tr>
             </thead>
@@ -164,9 +158,7 @@ export default function Research() {
                   <td style={tdStyle}>{pub.journal}</td>
                   <td style={tdStyle}>{pub.year}</td>
                   <td style={tdStyle}>{pub.doi ? <a href={pub.doi} target="_blank" rel="noopener noreferrer">Link</a> : ''}</td>
-                  <td style={tdStyle}>{pub.indexing}</td>
                   <td style={tdStyle}>{pub.department}</td>
-                  <td style={tdStyle}>{pub.tags && pub.tags.join(', ')}</td>
                   <td style={tdStyle}>{pub.file ? <span>PDF</span> : ''}</td>
                 </tr>
               ))}
