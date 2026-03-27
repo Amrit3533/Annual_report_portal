@@ -62,7 +62,7 @@ function Dashboard() {
       try {
         const deptRes = await axios.get(`${API}/api/dashboard/department-stats`, config);
         const mappedDept = deptRes.data.map(d => ({ name: d.department, value: d.students }));
-        // If all values are 0 or array is empty, use fallback
+        //If all values are 0 or array is empty, use fallback
         const isDeptEmpty = !Array.isArray(mappedDept) || mappedDept.length === 0 || mappedDept.every(d => !d.value || d.value === 0);
         setDeptData(isDeptEmpty ? fallbackDept : mappedDept);
       } catch {
