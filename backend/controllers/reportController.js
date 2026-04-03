@@ -56,7 +56,6 @@ exports.fetchReport = async (req, res) => {
 
 exports.updateReportStatus = async (req, res) => {
   try {
-
     const { id } = req.params;
     const { status } = req.body;
     const userRole = req.user.role;
@@ -65,36 +64,50 @@ exports.updateReportStatus = async (req, res) => {
 
     if (userRole === "faculty" && status !== "submitted") {
       return res.status(403).json({
-        message: "Faculty can only submit reports"
+        message: "Faculty can only submit reports",
       });
     }
 
     if (userRole === "department" && status !== "approved") {
       return res.status(403).json({
-        message: "Department can only approve reports"
+        message: "Department can only approve reports",
       });
     }
 
     if (!["submitted", "approved"].includes(status)) {
       return res.status(400).json({
-        message: "Invalid status update"
+        message: "Invalid status update",
       });
     }
 
-    await db.execute(
-      "UPDATE reports SET status = ? WHERE id = ?",
-      [status, id]
-    );
+    await db.execute("UPDATE reports SET status = ? WHERE id = ?", [
+      status,
+      id,
+    ]);
 
     res.status(200).json({
-      message: "Report status updated successfully"
+      message: "Report status updated successfully",
     });
-
   } catch (error) {
-
     res.status(500).json({
-      error: error.message
+      error: error.message,
     });
-
   }
+  exports.getSingleReport = async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const [rows] = await db.execute("SELECT * FROM reports WHERE id = ?", [
+        id,
+      ]);
+
+      if (!rows.length) {
+        return res.status(404).json({ message: "Report not found" });
+      }
+
+      res.json(rows[0]);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  };
 };

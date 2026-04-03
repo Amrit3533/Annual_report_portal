@@ -3,7 +3,7 @@ const router = express.Router();
 const { verifyToken } = require("../middleware/authMiddleware");
 const { authorizeRoles } = require("../middleware/roleMiddleware");
 const reportGenerator = require('../controllers/reportGenerator');
-const { createReport, fetchReport} = require("../controllers/reportController");
+const { createReport, fetchReport, getSingleReport} = require("../controllers/reportController");
 const { updateReportStatus } = require("../controllers/reportController");
 
 router.post(  
@@ -29,5 +29,6 @@ router.put(
 
 
 router.get('/generate/:id', reportGenerator.generateReport);
+router.get("/reports/:id", getSingleReport);
 
 module.exports = router;

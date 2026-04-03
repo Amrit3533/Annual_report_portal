@@ -9,7 +9,6 @@ exports.authorizeRoles = (...allowedRoles) => {
         message: `Access denied for role: ${req.user.role}`
       });
     }
-
     next();
   };
 };

@@ -167,7 +167,6 @@ exports.updateUser = async (req, res) => {
 
 exports.deleteUser = async (req, res) => {
   try {
-
     const { id } = req.params;
 
     const [result] = await db.execute(

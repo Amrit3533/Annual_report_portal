@@ -21,7 +21,6 @@ exports.createDepartment = async (req, res) => {
 exports.getDepartments = async (req, res) => {
   try {
     const [rows] = await db.execute("SELECT * FROM departments");
-
     res.json(rows);
   } catch (error) {
     res.status(500).json({ error: error.message });
