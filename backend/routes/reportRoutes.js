@@ -1,34 +1,30 @@
 const express = require("express");
 const router = express.Router();
+
 const { verifyToken } = require("../middleware/authMiddleware");
 const { authorizeRoles } = require("../middleware/roleMiddleware");
-const reportGenerator = require('../controllers/reportGenerator');
-const { createReport, fetchReport, getSingleReport} = require("../controllers/reportController");
-const { updateReportStatus } = require("../controllers/reportController");
 
-router.post(  
+const reportController = require("../controllers/reportController");
+const reportGenerator = require("../controllers/reportGenerator");
+
+router.post(
   "/",
   verifyToken,
   authorizeRoles("admin", "department", "faculty"),
-  createReport,
+  reportController.createReport,
 );
 
-router.get(
-  "/",
-  // verifyToken,
-  // authorizeRoles("admin", "department", "faculty"),
-  fetchReport,
-);
+router.get("/", reportController.fetchReport);
 
 router.put(
   "/:id/status",
   verifyToken,
   authorizeRoles("faculty", "department", "admin"),
-  updateReportStatus,
+  reportController.updateReportStatus,
 );
 
+router.get("/generate/:id", reportGenerator.generateReport);
 
-router.get('/generate/:id', reportGenerator.generateReport);
-router.get("/reports/:id", getSingleReport);
+router.get("/reports/:id", reportController.getSingleReport);
 
 module.exports = router;

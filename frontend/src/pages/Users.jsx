@@ -1,17 +1,16 @@
-import { jwtDecode } from "jwt-decode";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const API = import.meta.env.VITE_API_URL;
+const API = import.meta.env.VITE_API_URL || "";
 const responsiveStyles = `
 @media (max-width: 900px) {
   .users-container {
-    padding: 1.2rem 0.2rem !important;
+    padding: 0.75rem 0.1rem 1rem !important;
     max-width: 100vw !important;
     min-width: 0 !important;
     width: 100vw !important;
   }
   .users-card {
-    padding: 1.2rem 0.2rem 1.5rem 0.2rem !important;
+    padding: 1rem 0.75rem 1.15rem !important;
     max-width: 100vw !important;
     width: 100vw !important;
   }
@@ -35,7 +34,7 @@ const responsiveStyles = `
 }
 @media (max-width: 600px) {
   .users-container, .users-card {
-    padding: 0.2rem 0.1rem 0.5rem 0.1rem !important;
+    padding: 0.25rem 0.15rem 0.75rem 0.15rem !important;
     max-width: 100vw !important;
     width: 100vw !important;
   }
@@ -52,6 +51,7 @@ const responsiveStyles = `
   }
 }
 `;
+import { jwtDecode } from "jwt-decode";
 
 function UserModal({ open, onClose, onSave, initial }) {
   const [form, setForm] = useState(
@@ -79,7 +79,7 @@ function UserModal({ open, onClose, onSave, initial }) {
     >
       <form
         style={{
-          background: "#fff",
+          background: "#f5f2ec",
           borderRadius: 12,
           padding: 32,
           minWidth: 320,
@@ -285,23 +285,23 @@ function Users() {
       <div
         className="users-container"
         style={{
-          padding: "2.5rem 3.5rem",
-          maxWidth: 1280,
+          padding: "0.75rem 2rem 1.5rem",
+          maxWidth: 1240,
           margin: "0 auto",
           minHeight: "calc(100vh - 64px)",
-          background: "#f5f2ec",
+          background: "transparent",
           width: "100%",
         }}
       >
         <div
           className="users-card"
           style={{
-            background: "#fff",
+            background: "#f5f2ec",
             borderRadius: 12,
             boxShadow: "0 2px 12px 0 rgba(0,0,0,0.07)",
-            padding: "2rem 2.5rem 2.5rem 2.5rem",
-            marginTop: 32,
-            minHeight: 500,
+            padding: "1.5rem 1.75rem 1.75rem",
+            marginTop: 0,
+            minHeight: 0,
             width: "100%",
             maxWidth: "100%",
           }}
@@ -312,12 +312,14 @@ function Users() {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              marginBottom: 32,
+              gap: 16,
+              marginBottom: 20,
+              flexWrap: "wrap",
             }}
           >
             <h1
               style={{
-                fontSize: "2.2rem",
+                fontSize: "clamp(1.6rem, 3vw, 2.1rem)",
                 fontWeight: 700,
                 letterSpacing: "0.02em",
                 margin: 0,
@@ -332,14 +334,14 @@ function Users() {
                   setEditUser(null);
                 }}
                 style={{
-                  background: "linear-gradient(90deg,#5b5bf7,#a0401e)",
+                  background: "linear-gradient(90deg,#c8522a,#a0401e)",
                   color: "#fff",
                   border: "none",
                   borderRadius: 8,
-                  padding: "12px 28px",
+                  padding: "11px 22px",
                   fontWeight: 600,
-                  fontSize: 16,
-                  boxShadow: "0 2px 8px 0 rgba(90,90,90,0.07)",
+                  fontSize: 15,
+                  boxShadow: "0 2px 8px 0 rgba(160,64,30,0.12)",
                 }}
               >
                 + Add User
@@ -355,49 +357,49 @@ function Users() {
               style={{
                 width: "100%",
                 borderCollapse: "collapse",
-                fontSize: 16,
-                background: "#fff",
+                fontSize: 15,
+                background: "#f5f2ec",
                 minWidth: 600,
               }}
             >
-              <thead style={{ background: "#f5f2ec" }}>
+              <thead style={{ background: "#ede8de" }}>
                 <tr>
                   <th
                     style={{
-                      padding: "16px 18px",
+                      padding: "14px 16px",
                       textAlign: "left",
                       fontWeight: 600,
-                      color: "#222",
+                      color: "#0f0f0f",
                     }}
                   >
                     Name
                   </th>
                   <th
                     style={{
-                      padding: "16px 18px",
+                      padding: "14px 16px",
                       textAlign: "left",
                       fontWeight: 600,
-                      color: "#222",
+                      color: "#0f0f0f",
                     }}
                   >
                     Role
                   </th>
                   <th
                     style={{
-                      padding: "16px 18px",
+                      padding: "14px 16px",
                       textAlign: "left",
                       fontWeight: 600,
-                      color: "#222",
+                      color: "#0f0f0f",
                     }}
                   >
                     Email
                   </th>
                   <th
                     style={{
-                      padding: "16px 18px",
+                      padding: "14px 16px",
                       textAlign: "right",
                       fontWeight: 600,
-                      color: "#222",
+                      color: "#0f0f0f",
                     }}
                   >
                     Actions
@@ -427,12 +429,12 @@ function Users() {
                   users.map((user) => (
                     <tr
                       key={user.id}
-                      style={{ borderBottom: "1px solid #ede8de" }}
+                      style={{ borderBottom: "1px solid #d4cfc5" }}
                     >
-                      <td style={{ padding: "14px 18px" }}>{user.name}</td>
-                      <td style={{ padding: "14px 18px" }}>{user.role}</td>
-                      <td style={{ padding: "14px 18px" }}>{user.email}</td>
-                      <td style={{ padding: "14px 18px", textAlign: "right" }}>
+                      <td style={{ padding: "12px 16px" }}>{user.name}</td>
+                      <td style={{ padding: "12px 16px" }}>{user.role}</td>
+                      <td style={{ padding: "12px 16px" }}>{user.email}</td>
+                      <td style={{ padding: "12px 16px", textAlign: "right" }}>
                         <button
                           onClick={() => {
                             setEditUser(user);
@@ -440,13 +442,13 @@ function Users() {
                           }}
                           style={{
                             background: "#ede8de",
-                            color: "#5b5bf7",
+                            color: "#0f0f0f",
                             border: "none",
                             borderRadius: 6,
                             padding: "6px 14px",
                             marginRight: 8,
                             fontWeight: 600,
-                            fontSize: 15,
+                            fontSize: 14,
                           }}
                         >
                           Edit
@@ -458,13 +460,13 @@ function Users() {
                               setConfirmDelete(true);
                             }}
                             style={{
-                              background: "#fff0f0",
+                              background: "#fdf0ec",
                               color: "#a0401e",
                               border: "none",
                               borderRadius: 6,
                               padding: "6px 14px",
                               fontWeight: 600,
-                              fontSize: 15,
+                              fontSize: 14,
                             }}
                           >
                             Disable
@@ -504,9 +506,9 @@ function Users() {
           >
             <div
               style={{
-                background: "#fff",
+                background: "#f5f2ec",
                 borderRadius: 12,
-                padding: 32,
+                padding: 24,
                 minWidth: 320,
                 boxShadow: "0 2px 16px 0 rgba(0,0,0,0.10)",
                 display: "flex",
@@ -522,7 +524,7 @@ function Users() {
                   <button
                     onClick={() => handleDelete(deleteId)}
                     style={{
-                      background: "#a0401e",
+                      background: "#c8522a",
                       color: "#fff",
                       border: "none",
                       borderRadius: 6,

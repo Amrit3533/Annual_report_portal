@@ -110,4 +110,54 @@ exports.updateReportStatus = async (req, res) => {
       res.status(500).json({ error: err.message });
     }
   };
+  exports.getSingleReport = async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const [rows] = await db.execute("SELECT * FROM reports WHERE id = ?", [
+        id,
+      ]);
+
+      if (!rows.length) {
+        return res.status(404).json({ message: "Report not found" });
+      }
+
+      res.json(rows[0]);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  };
+  exports.getSingleReport = async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const [rows] = await db.execute("SELECT * FROM reports WHERE id = ?", [
+        id,
+      ]);
+
+      if (!rows.length) {
+        return res.status(404).json({ message: "Report not found" });
+      }
+
+      res.json(rows[0]);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  };
+};
+
+exports.getSingleReport = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const [rows] = await db.execute("SELECT * FROM reports WHERE id = ?", [id]);
+
+    if (!rows.length) {
+      return res.status(404).json({ message: "Report not found" });
+    }
+
+    res.json(rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 };

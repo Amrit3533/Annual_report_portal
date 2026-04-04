@@ -791,6 +791,24 @@ export default function ReportDetails() {
               {report.description && (
                 <p className="hero-desc">{report.description}</p>
               )}
+              {report.s3_url && (
+                <a
+                  href={report.s3_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: "inline-block",
+                    marginTop: "10px",
+                    padding: "8px 12px",
+                    background: "#c8522a",
+                    color: "#fff",
+                    borderRadius: "6px",
+                    textDecoration: "none",
+                  }}
+                >
+                  Download Report
+                </a>
+              )}
 
               {/* Section data indicators */}
               <div className="hero-sections">

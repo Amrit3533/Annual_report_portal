@@ -451,12 +451,8 @@ export default function Login() {
               </button>
             </form>
 
-            <div className="divider"><span>or</span></div>
 
-            <p className="signup-prompt">
-              Don't have an account?{" "}
-              <Link to="/register">Create one</Link>
-            </p>
+            
           </div>
         </div>
       </div>

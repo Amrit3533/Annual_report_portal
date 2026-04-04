@@ -1,15 +1,6 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { Plus, X } from "lucide-react";
-
-const departmentsData = [
-  {
-    department: "Computer Science",
-    hod: "Dr. Rajesh Kumar",
-    email: "cs@college.edu",
-    faculty: 20,
-    publications: 110,
-  },
-];
 
 function AddDepartmentModal({ open, onClose, onAdd }) {
   const [form, setForm] = useState({
@@ -35,21 +26,26 @@ function AddDepartmentModal({ open, onClose, onAdd }) {
 
   if (!open) return null;
   return (
-    <div style={{
-      position: "fixed",
-      top: 0,
-      left: 0,
-      width: "100vw",
-      height: "100vh",
-      background: "rgba(0,0,0,0.18)",
-      zIndex: 2000,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center"
-    }}>
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100vw",
+        height: "100vh",
+        background: "rgba(0,0,0,0.18)",
+        zIndex: 2000,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <form
         className="departments-modal-form"
-        onSubmit={e => { e.preventDefault(); onAdd(form); }}
+        onSubmit={(e) => {
+          e.preventDefault();
+          onAdd(form);
+        }}
         style={{
           background: "#fff",
           borderRadius: 28,
@@ -65,47 +61,135 @@ function AddDepartmentModal({ open, onClose, onAdd }) {
         }}
         autoComplete="off"
       >
-        <div style={{
-          background: "linear-gradient(90deg,#5b5bf7,#a0401e)",
-          borderTopLeftRadius: 28,
-          borderTopRightRadius: 28,
-          padding: "28px 32px 18px 32px",
-          color: "#fff",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between"
-        }}>
+        <div
+          style={{
+            background: "linear-gradient(90deg,#5b5bf7,#a0401e)",
+            borderTopLeftRadius: 28,
+            borderTopRightRadius: 28,
+            padding: "28px 32px 18px 32px",
+            color: "#fff",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
           <span style={{ fontSize: 28, fontWeight: 700 }}>Add Department</span>
-          <button type="button" onClick={onClose} style={{ background: "none", border: "none", color: "#fff", fontSize: 28, cursor: "pointer" }} aria-label="Close"><X size={32} /></button>
+          <button
+            type="button"
+            onClick={onClose}
+            style={{
+              background: "none",
+              border: "none",
+              color: "#fff",
+              fontSize: 28,
+              cursor: "pointer",
+            }}
+            aria-label="Close"
+          >
+            <X size={32} />
+          </button>
         </div>
-        <div style={{
-          padding: "32px 32px 0 32px",
-          display: "flex",
-          flexDirection: "column",
-          gap: 18,
-          overflowY: "auto",
-          flex: 1,
-          minHeight: 0,
-          maxHeight: 320
-        }}>
-          <input required placeholder="Department Name" value={form.department} onChange={e => setForm(f => ({ ...f, department: e.target.value }))} style={inputStyle} />
-          <input required placeholder="HOD Name" value={form.hod} onChange={e => setForm(f => ({ ...f, hod: e.target.value }))} style={inputStyle} />
-          <input required placeholder="HOD Email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} style={inputStyle} />
-          <input required placeholder="Faculty Count" value={form.faculty} onChange={e => setForm(f => ({ ...f, faculty: e.target.value }))} style={inputStyle} />
-          <input required placeholder="Publications" value={form.publications} onChange={e => setForm(f => ({ ...f, publications: e.target.value }))} style={inputStyle} />
+        <div
+          style={{
+            padding: "32px 32px 0 32px",
+            display: "flex",
+            flexDirection: "column",
+            gap: 18,
+            overflowY: "auto",
+            flex: 1,
+            minHeight: 0,
+            maxHeight: 320,
+          }}
+        >
+          <input
+            required
+            placeholder="Department Name"
+            value={form.department}
+            onChange={(e) =>
+              setForm((f) => ({ ...f, department: e.target.value }))
+            }
+            style={inputStyle}
+          />
+          <input
+            required
+            placeholder="HOD Name"
+            value={form.hod}
+            onChange={(e) => setForm((f) => ({ ...f, hod: e.target.value }))}
+            style={inputStyle}
+          />
+          <input
+            required
+            placeholder="HOD Email"
+            value={form.email}
+            onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+            style={inputStyle}
+          />
+          <input
+            required
+            placeholder="Faculty Count"
+            value={form.faculty}
+            onChange={(e) =>
+              setForm((f) => ({ ...f, faculty: e.target.value }))
+            }
+            style={inputStyle}
+          />
+          <input
+            required
+            placeholder="Publications"
+            value={form.publications}
+            onChange={(e) =>
+              setForm((f) => ({ ...f, publications: e.target.value }))
+            }
+            style={inputStyle}
+          />
         </div>
-        <div style={{
-          display: "flex",
-          gap: 18,
-          justifyContent: "center",
-          padding: "0 0 32px 0",
-          marginTop: 18,
-          background: "#fff",
-          borderBottomLeftRadius: 28,
-          borderBottomRightRadius: 28,
-        }}>
-          <button type="button" onClick={onClose} style={{ background: "#fff", color: "#444", border: "1.5px solid #e0e0e0", borderRadius: 10, padding: "12px 32px", fontWeight: 600, fontSize: 18, cursor: "pointer", boxShadow: "0 1px 4px 0 rgba(0,0,0,0.04)", minWidth: 120 }}>Cancel</button>
-          <button type="submit" style={{ background: "linear-gradient(90deg,#5b5bf7,#a0401e)", color: "#fff", border: "none", borderRadius: 10, padding: "12px 32px", fontWeight: 600, fontSize: 18, cursor: "pointer", boxShadow: "0 1px 4px 0 rgba(0,0,0,0.04)", minWidth: 180 }}>Add Department</button>
+        <div
+          style={{
+            display: "flex",
+            gap: 18,
+            justifyContent: "center",
+            padding: "0 0 32px 0",
+            marginTop: 18,
+            background: "#fff",
+            borderBottomLeftRadius: 28,
+            borderBottomRightRadius: 28,
+          }}
+        >
+          <button
+            type="button"
+            onClick={onClose}
+            style={{
+              background: "#fff",
+              color: "#444",
+              border: "1.5px solid #e0e0e0",
+              borderRadius: 10,
+              padding: "12px 32px",
+              fontWeight: 600,
+              fontSize: 18,
+              cursor: "pointer",
+              boxShadow: "0 1px 4px 0 rgba(0,0,0,0.04)",
+              minWidth: 120,
+            }}
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            style={{
+              background: "linear-gradient(90deg,#5b5bf7,#a0401e)",
+              color: "#fff",
+              border: "none",
+              borderRadius: 10,
+              padding: "12px 32px",
+              fontWeight: 600,
+              fontSize: 18,
+              cursor: "pointer",
+              boxShadow: "0 1px 4px 0 rgba(0,0,0,0.04)",
+              minWidth: 180,
+            }}
+          >
+            Add Department
+          </button>
         </div>
       </form>
     </div>
@@ -124,9 +208,6 @@ const inputStyle = {
   width: "100%",
   boxSizing: "border-box",
 };
-
-// Responsive styles using media queries
-// Add this at the top of the file or after imports
 
 const responsiveStyles = `
 @media (max-width: 700px) {
@@ -180,29 +261,130 @@ const responsiveStyles = `
 }`;
 
 // Inject styles into the document head
-if (typeof document !== 'undefined' && !document.getElementById('departments-responsive-styles')) {
-  const style = document.createElement('style');
-  style.id = 'departments-responsive-styles';
+if (
+  typeof document !== "undefined" &&
+  !document.getElementById("departments-responsive-styles")
+) {
+  const style = document.createElement("style");
+  style.id = "departments-responsive-styles";
   style.innerHTML = responsiveStyles;
   document.head.appendChild(style);
 }
 
 export default function Departments() {
-  const [departments, setDepartments] = useState(departmentsData);
+  const [departments, setDepartments] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const handleAddDepartment = (form) => {
     setDepartments((prev) => [...prev, form]);
     setModalOpen(false);
   };
+
+  useEffect(() => {
+    const fetchDepartments = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await fetch("http://localhost:5000/api/departments", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await res.json();
+        const formatted = data.map((dept) => ({
+          department: dept.name || "N/A",
+          hod: dept.hod || "N/A",
+          email: dept.email || "N/A",
+          faculty: dept.faculty ?? "N/A",
+          publications: dept.publications ?? "N/A",
+        }));
+        setDepartments(formatted);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchDepartments();
+  }, []);
+
   return (
-    <div style={{ padding: "2.5rem 1rem", maxWidth: 1200, margin: "0 auto", minHeight: "80vh", background: "#f5f2ec", width: "100%", boxSizing: "border-box" }}>
-      <div style={{ background: "#fff", borderRadius: 20, boxShadow: "0 2px 12px 0 rgba(0,0,0,0.07)", padding: "2rem 1.5rem 2.5rem 1.5rem", marginTop: 32, minHeight: 400, width: "100%", maxWidth: "100%", overflow: "auto", transition: "min-height 0.2s, width 0.2s" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 32, flexWrap: "wrap", gap: 12 }}>
-          <h1 style={{ fontSize: "2.2rem", fontWeight: 700, letterSpacing: "0.02em", margin: 0 }}>Department Management</h1>
-          <button style={{ background: "linear-gradient(90deg,#5b5bf7,#a0401e)", color: "#fff", border: "none", borderRadius: 16, padding: "14px 28px", fontWeight: 600, fontSize: 18, boxShadow: "0 2px 8px 0 rgba(90,90,90,0.07)", display: "flex", alignItems: "center", gap: 10, minWidth: 180 }} onClick={() => setModalOpen(true)}><Plus size={22} /> Add Department</button>
+    <div
+      style={{
+        padding: "2.5rem 1rem",
+        maxWidth: 1200,
+        margin: "0 auto",
+        minHeight: "80vh",
+        background: "#f5f2ec",
+        width: "100%",
+        boxSizing: "border-box",
+      }}
+    >
+      <div
+        style={{
+          background: "#fff",
+          borderRadius: 20,
+          boxShadow: "0 2px 12px 0 rgba(0,0,0,0.07)",
+          padding: "2rem 1.5rem 2.5rem 1.5rem",
+          marginTop: 32,
+          minHeight: 400,
+          width: "100%",
+          maxWidth: "100%",
+          overflow: "auto",
+          transition: "min-height 0.2s, width 0.2s",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: 32,
+            flexWrap: "wrap",
+            gap: 12,
+          }}
+        >
+          <h1
+            style={{
+              fontSize: "2.2rem",
+              fontWeight: 700,
+              letterSpacing: "0.02em",
+              margin: 0,
+            }}
+          >
+            Department Management
+          </h1>
+          <button
+            style={{
+              background: "linear-gradient(90deg,#5b5bf7,#a0401e)",
+              color: "#fff",
+              border: "none",
+              borderRadius: 16,
+              padding: "14px 28px",
+              fontWeight: 600,
+              fontSize: 18,
+              boxShadow: "0 2px 8px 0 rgba(90,90,90,0.07)",
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              minWidth: 180,
+            }}
+            onClick={() => setModalOpen(true)}
+          >
+            <Plus size={22} /> Add Department
+          </button>
         </div>
         <div style={{ overflowX: "auto", width: "100%" }}>
-          <table className="departments-table" style={{ width: "100%", borderCollapse: "collapse", fontSize: 17, background: "#fff", minWidth: 700, maxWidth: "100%" }}>
+          <table
+            className="departments-table"
+            style={{
+              width: "100%",
+              borderCollapse: "collapse",
+              fontSize: 17,
+              background: "#fff",
+              minWidth: 700,
+              maxWidth: "100%",
+            }}
+          >
             <thead style={{ background: "#f5f2ec" }}>
               <tr>
                 <th style={thStyle}>Department</th>
@@ -226,7 +408,11 @@ export default function Departments() {
           </table>
         </div>
       </div>
-      <AddDepartmentModal open={modalOpen} onClose={() => setModalOpen(false)} onAdd={handleAddDepartment} />
+      <AddDepartmentModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onAdd={handleAddDepartment}
+      />
     </div>
   );
 }
