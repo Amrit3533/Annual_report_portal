@@ -13,7 +13,7 @@ import {
   FaUsers as Users,
   FaBuilding as Building2,
   FaBookOpen as BookOpen,
-  FaDollarSign as DollarSign,
+  FaChalkboardTeacher as Teacher,
   FaTrophy as Trophy,
 } from "react-icons/fa";
 import { useEffect, useState } from "react";
@@ -26,157 +26,32 @@ function Dashboard() {
   const [placementData, setPlacementData] = useState([]);
   const [loading, setLoading] = useState(true);
   const API = import.meta.env.VITE_API_URL;
-  const token = localStorage.getItem("token");
-  const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
-
-  // Fallback static data
-  const fallbackStats = {
-    total_users: 1200,
-    total_departments: 8,
-    research_count: 430,
-    annual_budget: "₹12M",
-    student_achievements: 250,
-  };
-  const fallbackPlacement = [
-    { year: "2020", placement: 40 },
-    { year: "2021", placement: 60 },
-    { year: "2022", placement: 90 },
-    { year: "2023", placement: 120 },
-    { year: "2024", placement: 160 },
-  ];
-  const fallbackDept = [
-    { name: "Computer Science", value: 50 },
-    { name: "Civil", value: 20 },
-    { name: "Mechanical", value: 10 },
-    { name: "Electrical", value: 10 },
-  ];
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const statsRes = await axios.get(`${API}/api/dashboard/stats`, config);
-        const statsData = statsRes.data;
-        const isStatsEmpty =
-          !statsData ||
-          typeof statsData !== "object" ||
-          Object.values(statsData).every(
-            (v) => v === 0 || v === null || v === undefined || v === "",
-          );
-        setStats(isStatsEmpty ? fallbackStats : statsData);
-      } catch {
-        setStats(fallbackStats);
-      }
-      try {
-        const deptRes = await axios.get(
-          `${API}/api/dashboard/department-stats`,
-          config,
-        );
-        let mappedDept = Array.isArray(deptRes.data)
-          ? deptRes.data.map((d) => ({ name: d.department, value: d.students }))
-          : [];
-        // If all values are 0, array is empty, or data is invalid, use fallback
-        if (
-          !Array.isArray(mappedDept) ||
-          mappedDept.length === 0 ||
-          mappedDept.some(
-            (d) => !d.name || typeof d.value !== "number" || isNaN(d.value),
-          )
-        ) {
-          mappedDept = fallbackDept;
-        }
-        setDeptData(mappedDept);
-      } catch {
-        setDeptData(fallbackDept);
-      }
-      try {
-        const placementRes = await axios.get(
-          `${API}/api/dashboard/placement-trend`,
-          config,
-        );
-        let mappedPlacement = Array.isArray(placementRes.data)
-          ? placementRes.data.map((d) => ({
-              year: String(d.year),
-              placement: Number(d.placed_students),
-            }))
-          : [];
-        // If all values are 0, array is empty, or data is invalid, use fallback
-        if (
-          !Array.isArray(mappedPlacement) ||
-          mappedPlacement.length === 0 ||
-          mappedPlacement.some(
-            (d) =>
-              !d.year || typeof d.placement !== "number" || isNaN(d.placement),
-          )
-        ) {
-          mappedPlacement = fallbackPlacement;
-        }
-        setPlacementData(mappedPlacement);
-      } catch {
-        setPlacementData(fallbackPlacement);
-      }
-      setLoading(false);
-    }
-    fetchData();
-    // eslint-disable-next-line
-  }, []);
-
-  // Helper to check for valid stat value (not null, undefined, or empty string, or 0)
-  const validStat = (val, fallback) => {
-    if (
-      val === null ||
-      val === undefined ||
-      val === "" ||
-      (typeof val === "number" && (isNaN(val) || val === 0))
-    )
-      return fallback;
-    return val;
-  };
-
+  const [token, setToken] = useState(localStorage.getItem("token"));
   // If all stats are 0 or missing, use fallback
-  const isStatsEmpty =
-    !stats ||
-    Object.values(stats).every(
-      (v) => v === 0 || v === null || v === undefined || v === "",
-    );
   const kpiData = [
     {
       title: "Total Users",
-      value: validStat(
-        isStatsEmpty ? undefined : stats.total_users,
-        fallbackStats.total_users,
-      ),
+      value: stats.total_users || 0,
       icon: Users,
     },
     {
       title: "Total Departments",
-      value: validStat(
-        isStatsEmpty ? undefined : stats.total_departments,
-        fallbackStats.total_departments,
-      ),
+      value: stats.total_departments || 0,
       icon: Building2,
     },
     {
       title: "Research Publications",
-      value: validStat(
-        isStatsEmpty ? undefined : stats.research_count,
-        fallbackStats.research_count,
-      ),
+      value: stats.research_count || 0,
       icon: BookOpen,
     },
     {
-      title: "Annual Budget",
-      value: validStat(
-        isStatsEmpty ? undefined : stats.annual_budget,
-        fallbackStats.annual_budget,
-      ),
-      icon: DollarSign,
+      title: "Faculty Achievements",
+      value: stats.faculty_achievements || 0,
+      icon: Teacher,
     },
     {
       title: "Student Achievements",
-      value: validStat(
-        isStatsEmpty ? undefined : stats.student_achievements,
-        fallbackStats.student_achievements,
-      ),
+      value: stats.student_achievements || 0,
       icon: Trophy,
     },
   ];
@@ -222,6 +97,57 @@ function Dashboard() {
     },
   };
 
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setToken(localStorage.getItem("token"));
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
+
+  const fetchData = async () => {
+    const config = token
+      ? { headers: { Authorization: `Bearer ${token}` } }
+      : {};
+    try {
+      const [statsRes, deptRes, placementRes] = await Promise.all([
+        axios.get(`${API}/api/dashboard/stats`, config),
+        axios.get(`${API}/api/dashboard/getDepartmentStats`, config),
+        axios.get(`${API}/api/dashboard/getPlacementTrend`, config),
+      ]);
+
+      setStats(statsRes.data);
+
+      setDeptData(
+        deptRes.data.map((d) => ({
+          name: d.department,
+          value: Number(d.students || 0),
+        })),
+      );
+
+      setPlacementData(
+        placementRes.data.map((d) => ({
+          year: String(d.year),
+          placement: Number(d.placed_students || 0),
+        })),
+      );
+    } catch (err) {
+      console.error("Dashboard error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (token) fetchData();
+  }, [token]);
+
+  if (loading) {
+    return <h2>Loading Dashboard...</h2>;
+  }
+
   return (
     <div style={{ padding: "2.5rem 3.5rem", maxWidth: 1280, margin: "0 auto" }}>
       <h1
@@ -255,6 +181,8 @@ function Dashboard() {
 
       {/* Charts */}
       <div style={styles.charts}>
+        {placementData.length === 0 && <p>No placement data</p>}
+        {deptData.length === 0 && <p>No department data</p>}
         {/* Bar Chart */}
         <div style={styles.chartCard}>
           <h3
@@ -272,13 +200,7 @@ function Dashboard() {
           <div style={{ width: 380, height: 320, margin: "0 auto" }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
-                data={
-                  Array.isArray(placementData) &&
-                  placementData.length > 0 &&
-                  placementData.some((d) => d.placement > 0)
-                    ? placementData
-                    : fallbackPlacement
-                }
+                data={placementData}
                 barSize={60}
                 margin={{ top: 10, right: 10, left: 10, bottom: 10 }}
               >
@@ -292,7 +214,7 @@ function Dashboard() {
                   tick={{ fontSize: 20, fontWeight: 600 }}
                   axisLine={false}
                   tickLine={false}
-                  domain={[0, 160]}
+                  domain={[0, "auto"]}
                 />
                 <Tooltip />
                 <Bar
@@ -322,13 +244,7 @@ function Dashboard() {
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
-                  data={
-                    Array.isArray(deptData) &&
-                    deptData.length > 0 &&
-                    deptData.some((d) => d.value > 0)
-                      ? deptData
-                      : fallbackDept
-                  }
+                  data={deptData}
                   dataKey="value"
                   nameKey="name"
                   outerRadius={110}

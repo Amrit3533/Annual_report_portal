@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Plus, X } from "lucide-react";
 
-function AddDepartmentModal({ open, onClose, onAdd }) {
+function AddDepartmentModal({ open, onClose, onAdd, loading }) {
   const [form, setForm] = useState({
     department: "",
     hod: "",
@@ -175,20 +175,22 @@ function AddDepartmentModal({ open, onClose, onAdd }) {
           </button>
           <button
             type="submit"
+            disabled={loading}
             style={{
-              background: "linear-gradient(90deg,#5b5bf7,#a0401e)",
+              background: loading
+                ? "#ccc"
+                : "linear-gradient(90deg,#5b5bf7,#a0401e)",
               color: "#fff",
               border: "none",
               borderRadius: 10,
               padding: "12px 32px",
               fontWeight: 600,
               fontSize: 18,
-              cursor: "pointer",
-              boxShadow: "0 1px 4px 0 rgba(0,0,0,0.04)",
+              cursor: loading ? "not-allowed" : "pointer",
               minWidth: 180,
             }}
           >
-            Add Department
+            {loading ? "Adding..." : "Add Department"}
           </button>
         </div>
       </form>
@@ -274,39 +276,70 @@ if (
 export default function Departments() {
   const [departments, setDepartments] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
-  const handleAddDepartment = (form) => {
-    setDepartments((prev) => [...prev, form]);
-    setModalOpen(false);
+  const [loading, setLoading] = useState(false);
+  const fetchDepartments = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch("http://localhost:5000/api/departments", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
+      const formatted = data.map((dept) => ({
+        id: dept.id,
+        department: dept.name || "N/A",
+        hod: dept.hod_name || "N/A",
+        email: dept.email || "N/A",
+        faculty: dept.total_faculty ?? "N/A",
+        publications: dept.publications_count ?? "N/A",
+      }));
+      setDepartments(formatted);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleAddDepartment = async (form) => {
+    try {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!emailRegex.test(form.email)) {
+        return alert("Invalid email format");
+      }
+      const payload = {
+        name: form.department.trim(),
+        description: "", // optional
+        hod_name: form.hod.trim(),
+        email: form.email.trim(),
+        total_faculty: Number(form.faculty),
+        publications_count: Number(form.publications),
+      };
+
+      const token = localStorage.getItem("token");
+      setLoading(true);
+      console.log("TOKEN:", token);
+      await axios.post("http://localhost:5000/api/departments", payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      await fetchDepartments();
+      setModalOpen(false);
+    } catch (error) {
+      console.error(error);
+
+      alert(error.response?.data?.message || "Failed to add department");
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    const fetchDepartments = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const res = await fetch("http://localhost:5000/api/departments", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const data = await res.json();
-        const formatted = data.map((dept) => ({
-          department: dept.name || "N/A",
-          hod: dept.hod || "N/A",
-          email: dept.email || "N/A",
-          faculty: dept.faculty ?? "N/A",
-          publications: dept.publications ?? "N/A",
-        }));
-        setDepartments(formatted);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
     fetchDepartments();
   }, []);
-
   return (
     <div
       style={{
@@ -390,13 +423,13 @@ export default function Departments() {
                 <th style={thStyle}>Department</th>
                 <th style={thStyle}>HOD</th>
                 <th style={thStyle}>Email</th>
-                <th style={thStyle}>Faculty</th>
-                <th style={thStyle}>Publications</th>
+                <th style={thStyle}>Total Faculty</th>
+                <th style={thStyle}>No. of Publications</th>
               </tr>
             </thead>
             <tbody>
-              {departments.map((dept, idx) => (
-                <tr key={idx} style={{ borderBottom: "1px solid #ede8de" }}>
+              {departments.map((dept) => (
+                <tr key={dept.id} style={{ borderBottom: "1px solid #ede8de" }}>
                   <td style={tdStyle}>{dept.department}</td>
                   <td style={tdStyle}>{dept.hod}</td>
                   <td style={tdStyle}>{dept.email}</td>
@@ -412,6 +445,7 @@ export default function Departments() {
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         onAdd={handleAddDepartment}
+        loading={loading}
       />
     </div>
   );

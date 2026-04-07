@@ -4,7 +4,6 @@ const { v4: uuidv4 } = require("uuid");
 exports.createReport = async (req, res) => {
   try {
     const { title, year, department_id, description, status } = req.body;
-
     const id = uuidv4();
     const created_by = req.user.id;
 

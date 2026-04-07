@@ -30,7 +30,7 @@ exports.createUser = async (req, res) => {
         message: "Invalid role",
       });
     }
-
+    
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const id = uuidv4();

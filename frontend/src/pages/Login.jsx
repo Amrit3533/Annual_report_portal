@@ -6,6 +6,7 @@ const API_BASE = import.meta.env.VITE_API_URL || "";
 export default function Login() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: "", password: "" });
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -405,19 +406,73 @@ export default function Login() {
                   />
                 </div>
 
-                <div className="field">
+                <div className="field password-field">
                   <label htmlFor="password">Password</label>
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    autoComplete="current-password"
-                    placeholder="••••••••"
-                    value={form.password}
-                    onChange={handleChange}
-                    disabled={loading}
-                    required
-                  />
+                  <div className="password-input-wrapper">
+                    <input
+                      id="password"
+                      name="password"
+                      type={showPassword ? "text" : "password"}
+                      autoComplete="current-password"
+                      placeholder="••••••••"
+                      value={form.password}
+                      onChange={handleChange}
+                      disabled={loading}
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      className="toggle-password-btn"
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                    >
+                      {showPassword ? (
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.06 10.06 0 0 1 12 20c-5 0-9.27-3.11-11-8 1.21-3.06 3.6-5.5 6.53-6.71"/><path d="M1 1l22 22"/><path d="M9.53 9.53A3.5 3.5 0 0 0 12 16.5c1.38 0 2.63-.83 3.16-2.03"/><path d="M14.47 14.47A3.5 3.5 0 0 1 12 7.5c-.62 0-1.2.16-1.7.44"/></svg>
+                      ) : (
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12S5 5 12 5s11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3.5"/></svg>
+                      )}
+                    </button>
+                  </div>
+                  <style>{`
+                    .password-field .password-input-wrapper {
+                      display: flex;
+                      align-items: stretch;
+                      position: relative;
+                    }
+                    .password-field input[type="password"],
+                    .password-field input[type="text"] {
+                      flex: 1 1 auto;
+                      border-top-right-radius: 0;
+                      border-bottom-right-radius: 0;
+                      border-right: none;
+                    }
+                    .toggle-password-btn {
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      width: 48px;
+                      min-width: 48px;
+                      height: auto;
+                      background: none;
+                      border: 1.5px solid var(--border);
+                      border-left: none;
+                      border-top-right-radius: 6px;
+                      border-bottom-right-radius: 6px;
+                      color: #8a8178;
+                      cursor: pointer;
+                      transition: color 0.2s, background 0.2s;
+                      padding: 0;
+                    }
+                    .toggle-password-btn svg {
+                      display: block;
+                    }
+                    .toggle-password-btn:hover,
+                    .toggle-password-btn:focus {
+                      color: #c8522a;
+                      background: #f5f2ec;
+                      outline: none;
+                    }
+                  `}</style>
                 </div>
               </div>
 

@@ -55,10 +55,28 @@ import { jwtDecode } from "jwt-decode";
 
 function UserModal({ open, onClose, onSave, initial }) {
   const [form, setForm] = useState(
-    initial || { name: "", email: "", role: "faculty", password: "" },
+    initial || {
+      name: "",
+      email: "",
+      role: "faculty",
+      password: "",
+      registerNumber: "",
+      year: "",
+      department: "",
+    },
   );
   useEffect(() => {
-    setForm(initial || { name: "", email: "", role: "faculty", password: "" });
+    setForm(
+      initial || {
+        name: "",
+        email: "",
+        role: "faculty",
+        password: "",
+        registerNumber: "",
+        year: "",
+        department: "",
+      }
+    );
   }, [initial, open]);
 
   if (!open) return null;
@@ -121,6 +139,33 @@ function UserModal({ open, onClose, onSave, initial }) {
           <option value="faculty">Faculty</option>
           <option value="student">Student</option>
         </select>
+
+        {/* Student-specific fields */}
+        {form.role === "student" && (
+          <>
+            <input
+              required
+              placeholder="Register Number"
+              value={form.registerNumber}
+              onChange={e => setForm(f => ({ ...f, registerNumber: e.target.value }))}
+              style={{ padding: 8, borderRadius: 6, border: "1.5px solid #d4cfc5" }}
+            />
+            <input
+              required
+              placeholder="Year"
+              value={form.year}
+              onChange={e => setForm(f => ({ ...f, year: e.target.value }))}
+              style={{ padding: 8, borderRadius: 6, border: "1.5px solid #d4cfc5" }}
+            />
+            <input
+              required
+              placeholder="Department"
+              value={form.department}
+              onChange={e => setForm(f => ({ ...f, department: e.target.value }))}
+              style={{ padding: 8, borderRadius: 6, border: "1.5px solid #d4cfc5" }}
+            />
+          </>
+        )}
         {!initial && (
           <input
             required
@@ -179,6 +224,7 @@ function Users() {
   const [editUser, setEditUser] = useState(null);
   const [deleteId, setDeleteId] = useState(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [roleFilter, setRoleFilter] = useState("");
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -327,158 +373,134 @@ function Users() {
             >
               User Management
             </h1>
-            {currentUser?.role === "admin" && (
-              <button
-                onClick={() => {
-                  setModalOpen(true);
-                  setEditUser(null);
-                }}
+            <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
+              <select
+                value={roleFilter}
+                onChange={e => setRoleFilter(e.target.value)}
                 style={{
-                  background: "linear-gradient(90deg,#c8522a,#a0401e)",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: 8,
-                  padding: "11px 22px",
-                  fontWeight: 600,
+                  padding: "8px 14px",
+                  borderRadius: 6,
+                  border: "1.5px solid #d4cfc5",
+                  background: "#fff",
+                  color: "#0f0f0f",
+                  fontWeight: 500,
                   fontSize: 15,
-                  boxShadow: "0 2px 8px 0 rgba(160,64,30,0.12)",
                 }}
               >
-                + Add User
-              </button>
-            )}
+                <option value="">All Roles</option>
+                <option value="student">Student</option>
+                <option value="faculty">Faculty</option>
+                <option value="department">Department</option>
+              </select>
+              {currentUser?.role === "admin" && (
+                <button
+                  onClick={() => {
+                    setModalOpen(true);
+                    setEditUser(null);
+                  }}
+                  style={{
+                    background: "linear-gradient(90deg,#c8522a,#a0401e)",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: 8,
+                    padding: "11px 22px",
+                    fontWeight: 600,
+                    fontSize: 15,
+                    boxShadow: "0 2px 8px 0 rgba(160,64,30,0.12)",
+                  }}
+                >
+                  + Add User
+                </button>
+              )}
+            </div>
           </div>
           {error && (
             <div style={{ color: "#a0401e", marginBottom: 16 }}>{error}</div>
           )}
-          <div style={{ overflowX: "auto", width: "100%" }}>
-            <table
-              className="users-table"
-              style={{
-                width: "100%",
-                borderCollapse: "collapse",
-                fontSize: 15,
-                background: "#f5f2ec",
-                minWidth: 600,
-              }}
-            >
-              <thead style={{ background: "#ede8de" }}>
-                <tr>
-                  <th
-                    style={{
-                      padding: "14px 16px",
-                      textAlign: "left",
-                      fontWeight: 600,
-                      color: "#0f0f0f",
-                    }}
-                  >
-                    Name
-                  </th>
-                  <th
-                    style={{
-                      padding: "14px 16px",
-                      textAlign: "left",
-                      fontWeight: 600,
-                      color: "#0f0f0f",
-                    }}
-                  >
-                    Role
-                  </th>
-                  <th
-                    style={{
-                      padding: "14px 16px",
-                      textAlign: "left",
-                      fontWeight: 600,
-                      color: "#0f0f0f",
-                    }}
-                  >
-                    Email
-                  </th>
-                  <th
-                    style={{
-                      padding: "14px 16px",
-                      textAlign: "right",
-                      fontWeight: 600,
-                      color: "#0f0f0f",
-                    }}
-                  >
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {loading ? (
-                  <tr>
-                    <td
-                      colSpan={4}
-                      style={{ padding: 40, textAlign: "center" }}
-                    >
-                      Loading...
-                    </td>
-                  </tr>
-                ) : users.length === 0 ? (
-                  <tr>
-                    <td
-                      colSpan={4}
-                      style={{ padding: 40, textAlign: "center" }}
-                    >
-                      No users found.
-                    </td>
-                  </tr>
-                ) : (
-                  users.map((user) => (
-                    <tr
-                      key={user.id}
-                      style={{ borderBottom: "1px solid #d4cfc5" }}
-                    >
-                      <td style={{ padding: "12px 16px" }}>{user.name}</td>
-                      <td style={{ padding: "12px 16px" }}>{user.role}</td>
-                      <td style={{ padding: "12px 16px" }}>{user.email}</td>
-                      <td style={{ padding: "12px 16px", textAlign: "right" }}>
-                        <button
-                          onClick={() => {
-                            setEditUser(user);
-                            setModalOpen(true);
-                          }}
-                          style={{
-                            background: "#ede8de",
-                            color: "#0f0f0f",
-                            border: "none",
-                            borderRadius: 6,
-                            padding: "6px 14px",
-                            marginRight: 8,
-                            fontWeight: 600,
-                            fontSize: 14,
-                          }}
-                        >
-                          Edit
-                        </button>
-                        {currentUser?.id !== user.id && (
+          {/* Render separate tables for each role, but only show the filtered one if a filter is selected */}
+          {['admin', 'faculty', 'department', 'student'].map(role => {
+            if (roleFilter && role !== roleFilter) return null;
+            const roleUsers = users.filter(u => u.role === role);
+            if (roleUsers.length === 0) return null;
+            return (
+              <div key={role} style={{ marginBottom: 40 }}>
+                <h2 style={{ margin: '18px 0 10px 0', fontSize: 22, color: '#a0401e' }}>{role.charAt(0).toUpperCase() + role.slice(1)}s</h2>
+                <table
+                  className="users-table"
+                  style={{
+                    width: "100%",
+                    borderCollapse: "collapse",
+                    fontSize: 15,
+                    background: "#f5f2ec",
+                    minWidth: 600,
+                  }}
+                >
+                  <thead style={{ background: "#ede8de" }}>
+                    <tr>
+                      <th style={{ padding: "14px 16px", textAlign: "left", fontWeight: 600, color: "#0f0f0f" }}>Name</th>
+                      <th style={{ padding: "14px 16px", textAlign: "left", fontWeight: 600, color: "#0f0f0f" }}>Role</th>
+                      <th style={{ padding: "14px 16px", textAlign: "left", fontWeight: 600, color: "#0f0f0f" }}>Email</th>
+                      {role === 'student' && <th style={{ padding: "14px 16px", textAlign: "left", fontWeight: 600, color: "#0f0f0f" }}>Register Number</th>}
+                      {role === 'student' && <th style={{ padding: "14px 16px", textAlign: "left", fontWeight: 600, color: "#0f0f0f" }}>Year</th>}
+                      {role === 'student' && <th style={{ padding: "14px 16px", textAlign: "left", fontWeight: 600, color: "#0f0f0f" }}>Department</th>}
+                      <th style={{ padding: "14px 16px", textAlign: "right", fontWeight: 600, color: "#0f0f0f" }}>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {roleUsers.map(user => (
+                      <tr key={user.id} style={{ borderBottom: "1px solid #d4cfc5" }}>
+                        <td style={{ padding: "12px 16px" }}>{user.name}</td>
+                        <td style={{ padding: "12px 16px" }}>{user.role}</td>
+                        <td style={{ padding: "12px 16px" }}>{user.email}</td>
+                        {role === 'student' && <td style={{ padding: "12px 16px" }}>{user.registerNumber || user.register_number || "-"}</td>}
+                        {role === 'student' && <td style={{ padding: "12px 16px" }}>{user.year || "-"}</td>}
+                        {role === 'student' && <td style={{ padding: "12px 16px" }}>{user.department || "-"}</td>}
+                        <td style={{ padding: "12px 16px", textAlign: "right" }}>
                           <button
                             onClick={() => {
-                              setDeleteId(user.id);
-                              setConfirmDelete(true);
+                              setEditUser(user);
+                              setModalOpen(true);
                             }}
                             style={{
-                              background: "#fdf0ec",
-                              color: "#a0401e",
+                              background: "#ede8de",
+                              color: "#0f0f0f",
                               border: "none",
                               borderRadius: 6,
                               padding: "6px 14px",
+                              marginRight: 8,
                               fontWeight: 600,
                               fontSize: 14,
                             }}
                           >
-                            Disable
+                            Edit
                           </button>
-                        )}
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
+                          {currentUser?.id !== user.id && (
+                            <button
+                              onClick={() => {
+                                setDeleteId(user.id);
+                                setConfirmDelete(true);
+                              }}
+                              style={{
+                                background: "#fdf0ec",
+                                color: "#a0401e",
+                                border: "none",
+                                borderRadius: 6,
+                                padding: "6px 14px",
+                                fontWeight: 600,
+                                fontSize: 14,
+                              }}
+                            >
+                              Disable
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            );
+          })}
         </div>
         <UserModal
           open={modalOpen}

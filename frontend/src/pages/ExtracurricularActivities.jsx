@@ -84,6 +84,7 @@ const inputStyle = {
   outline: "none",
   fontWeight: 500,
   background: "#fafbfc",
+  color: "#222", // Make input text dark for visibility
   marginBottom: 0,
   width: "100%",
   boxSizing: "border-box",

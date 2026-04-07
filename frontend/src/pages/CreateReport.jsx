@@ -16,6 +16,7 @@ export default function CreateReport() {
     year: "",
     department_id: "",
     description: "",
+    status: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -63,17 +64,16 @@ export default function CreateReport() {
     if (!form.description.trim()) e.description = "Description is required.";
     else if (form.description.length > MAX_DESC)
       e.description = `Max ${MAX_DESC} characters.`;
+    if (!form.status) e.status = "Please select a status.";
     return e;
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     setForm({
       ...form,
       [name]: value,
     });
-
     setErrors((prev) => ({ ...prev, [name]: undefined }));
     setApiError("");
   };
@@ -104,6 +104,7 @@ export default function CreateReport() {
           year: Number(form.year),
           department_id: form.department_id,
           description: form.description.trim(),
+          status: form.status,
         }),
       });
 
@@ -120,13 +121,9 @@ export default function CreateReport() {
         );
       }
 
-      const id = data.id || data._id || data.reportId;
-
-      if (!id) {
-        throw new Error("Server did not return a report ID.");
-      }
-
-      navigate(`/dashboard/reports/${id}`);
+      // On success, redirect to reports list and show toast
+      navigate("/dashboard/reports", { state: { toast: "Report created Successfully" } });
+      return;
     } catch (err) {
       setApiError(err.message || "Something went wrong.");
     } finally {
@@ -518,10 +515,7 @@ export default function CreateReport() {
             <span className="topbar-sep">/</span>
             <span className="topbar-title">New Report</span>
           </div>
-          <div className="draft-badge">
-            <span className="draft-dot" />
-            Draft
-          </div>
+          {/* Removed draft badge */}
         </div>
 
         {/* ── BODY ── */}
@@ -594,7 +588,7 @@ export default function CreateReport() {
                   )}
                 </div>
 
-                {/* Year + Department */}
+                {/* Year + Department + Status */}
                 <div className="field-row">
                   <div className="field">
                     <label htmlFor="year">
@@ -633,7 +627,6 @@ export default function CreateReport() {
                       className={errors.department_id ? "err" : ""}
                     >
                       <option value="">Select department</option>
-
                       {departments.map((dept) => (
                         <option key={dept.id} value={dept.id}>
                           {dept.name}
@@ -644,6 +637,29 @@ export default function CreateReport() {
                       <span className="field-error">
                         {errors.department_id}
                       </span>
+                    )}
+                  </div>
+
+                  <div className="field">
+                    <label htmlFor="status">
+                      Report Status <span className="required-star">✦</span>
+                    </label>
+                    <select
+                      id="status"
+                      name="status"
+                      value={form.status}
+                      onChange={handleChange}
+                      disabled={loading}
+                      className={errors.status ? "err" : ""}
+                    >
+                      <option value="">Select status</option>
+                      <option value="draft">Draft</option>
+                      <option value="pending">Pending</option>
+                      <option value="approved">Approved</option>
+                      <option value="rejected">Rejected</option>
+                    </select>
+                    {errors.status && (
+                      <span className="field-error">{errors.status}</span>
                     )}
                   </div>
                 </div>

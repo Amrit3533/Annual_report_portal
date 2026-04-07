@@ -12,6 +12,8 @@ export default function StudentAchievements() {
   const [formData, setFormData] = useState({
     studentName: "",
     regNumber: "",
+    department: "",
+    year: "",
     achievement: "",
     category: "",
     date: "",
@@ -48,6 +50,8 @@ export default function StudentAchievements() {
     setFormData({
       studentName: "",
       regNumber: "",
+      department: "",
+      year: "",
       achievement: "",
       category: "",
       date: "",
@@ -420,6 +424,12 @@ export default function StudentAchievements() {
                 <h3>{achievement.achievement}</h3>
                 <p className="student-info">
                   {achievement.studentName} • {achievement.regNumber}
+                  {achievement.department && (
+                    <span style={{ marginLeft: 8 }}>| Dept: {achievement.department}</span>
+                  )}
+                  {achievement.year && (
+                    <span style={{ marginLeft: 8 }}>| Year: {achievement.year}</span>
+                  )}
                 </p>
                 <p className="date">📅 {achievement.date}</p>
                 <p className="desc">{achievement.description}</p>
@@ -467,6 +477,28 @@ export default function StudentAchievements() {
                       onChange={handleChange}
                       required
                       placeholder="Enter achievement title"
+                    />
+                  </div>
+                  <div className="field">
+                    <label htmlFor="department">Department</label>
+                    <input
+                      id="department"
+                      name="department"
+                      value={formData.department}
+                      onChange={handleChange}
+                      required
+                      placeholder="Enter department"
+                    />
+                  </div>
+                  <div className="field">
+                    <label htmlFor="year">Year</label>
+                    <input
+                      id="year"
+                      name="year"
+                      value={formData.year}
+                      onChange={handleChange}
+                      required
+                      placeholder="Enter year"
                     />
                   </div>
                   <div className="field">
