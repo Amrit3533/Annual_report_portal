@@ -9,6 +9,7 @@ const userRoutes = require("./routes/userRoutes");
 const academicRoutes = require("./routes/academicRoutes");
 const dataRoutes = require("./routes/dataRoutes");
 const reportRoutes = require("./routes/reportRoutes");
+const researchRoutes = require("./routes/researchRoutes");
 
 const cors = require("cors");
 app.use(cors());
@@ -22,6 +23,7 @@ app.use("/api/data", dataRoutes);
 app.use("/api/reports", reportRoutes);
 app.use("/api/report-generator", require("./routes/reportRoutes"));
 app.use("/api/dashboard", require("./routes/dashboardRoutes"));
+app.use("/api/research", researchRoutes);
 
 app.get("/", (req, res) => {
   res.send("Annual Report Portal Backend Running...");
