@@ -441,8 +441,8 @@ function Users() {
                       <th style={{ padding: "14px 16px", textAlign: "left", fontWeight: 600, color: "#0f0f0f" }}>Role</th>
                       <th style={{ padding: "14px 16px", textAlign: "left", fontWeight: 600, color: "#0f0f0f" }}>Email</th>
                       {role === 'student' && <th style={{ padding: "14px 16px", textAlign: "left", fontWeight: 600, color: "#0f0f0f" }}>Register Number</th>}
-                      {role === 'student' && <th style={{ padding: "14px 16px", textAlign: "left", fontWeight: 600, color: "#0f0f0f" }}>Year</th>}
-                      {role === 'student' && <th style={{ padding: "14px 16px", textAlign: "left", fontWeight: 600, color: "#0f0f0f" }}>Department</th>}
+                      {/* {role === 'student' && <th style={{ padding: "14px 16px", textAlign: "left", fontWeight: 600, color: "#0f0f0f" }}>Year</th>}
+                      {role === 'student' && <th style={{ padding: "14px 16px", textAlign: "left", fontWeight: 600, color: "#0f0f0f" }}>Department</th>} */}
                       <th style={{ padding: "14px 16px", textAlign: "right", fontWeight: 600, color: "#0f0f0f" }}>Actions</th>
                     </tr>
                   </thead>
@@ -452,9 +452,9 @@ function Users() {
                         <td style={{ padding: "12px 16px" }}>{user.name}</td>
                         <td style={{ padding: "12px 16px" }}>{user.role}</td>
                         <td style={{ padding: "12px 16px" }}>{user.email}</td>
-                        {role === 'student' && <td style={{ padding: "12px 16px" }}>{user.registerNumber || user.register_number || "-"}</td>}
-                        {role === 'student' && <td style={{ padding: "12px 16px" }}>{user.year || "-"}</td>}
-                        {role === 'student' && <td style={{ padding: "12px 16px" }}>{user.department || "-"}</td>}
+                        {role === 'student' && <td style={{ padding: "12px 16px" }}>{user.registration_no || user.registration_no || "-"}</td>}
+                        {/* {role === 'student' && <td style={{ padding: "12px 16px" }}>{user.year || "-"}</td>}
+                        {role === 'student' && <td style={{ padding: "12px 16px" }}>{user.department || "-"}</td>} */}
                         <td style={{ padding: "12px 16px", textAlign: "right" }}>
                           <button
                             onClick={() => {

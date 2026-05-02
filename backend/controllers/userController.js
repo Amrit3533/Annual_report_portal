@@ -1,6 +1,7 @@
 const db = require("../config/db");
 const bcrypt = require("bcrypt");
 const { v4: uuidv4 } = require("uuid");
+const { generateRegNo } = require("../utils/generateRegNo");
 
 exports.createUser = async (req, res) => {
   try {
@@ -66,16 +67,13 @@ exports.getUsers = async (req, res) => {
     // ROLE BASED FILTERING
 
     if (role === "admin") {
-      // Admin sees everything
       query += " ORDER BY users.created_at DESC";
     } else if (role === "department") {
-      // Department sees faculty + students
       query += `
         WHERE users.role IN ('faculty','student')
         ORDER BY users.created_at DESC
       `;
     } else if (role === "faculty") {
-      // Faculty sees students only
       query += `
         WHERE users.role = 'student'
         ORDER BY users.created_at DESC
@@ -87,8 +85,14 @@ exports.getUsers = async (req, res) => {
     }
 
     const [rows] = await db.execute(query);
+    const formattedUsers = rows.map((user) => ({
+      ...user,
+      registration_no:
+        user.role === "student" ? generateRegNo(user.id) : null,
+    }));
 
-    res.json(rows);
+    res.json(formattedUsers);
+
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
