@@ -295,7 +295,7 @@ export default function ReportDetails() {
     setError("");
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`${API_BASE}/api/reports/${id}`, {
+      const res = await fetch(`${API_BASE}/api/reports/full/:${id}`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
       if (res.status === 401 || res.status === 403) {
@@ -672,7 +672,7 @@ export default function ReportDetails() {
                   <rect x="6" y="14" width="12" height="8" />
                 </svg>
               </button>
-              <Link to={`/reports/${id}/edit`} className="edit-btn">
+              <Link to={`/dashboard/reports/${id}/edit`} className="edit-btn">
                 <svg
                   width="12"
                   height="12"

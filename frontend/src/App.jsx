@@ -19,6 +19,7 @@ import ExtracurricularActivities from "./pages/ExtracurricularActivities";
 import AcademicForm from "./pages/AcademicForm";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Infrastructure from "./pages/Infrastructure";
+import EditReport from "./pages/EditReport";
 
 function App() {
   return (
@@ -27,7 +28,6 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-       
         <Route path="/dashboard" element={<Layout />}>
           <Route index element={<Dashboard />} />
           <Route path="users" element={<Users />} />
@@ -42,6 +42,7 @@ function App() {
           <Route path="reports/create" element={<CreateReport />} />
           <Route path="reports/:id" element={<ReportDetails />} />
           <Route path="approvals" element={<Approvals />} /> 
+          <Route path="reports/:id/edit" element={<EditReport />} />
           <Route path="academicForm" element={<AcademicForm/>}></Route>
           <Route path="infrastructure" element={<Infrastructure/>}></Route>
         </Route>

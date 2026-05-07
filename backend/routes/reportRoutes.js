@@ -15,14 +15,25 @@ router.post(
 );
 
 router.get("/", reportController.fetchReport);
-
+router.get("/full/:id", reportController.getFullReport);
 router.put(
   "/:id/status",
   verifyToken,
   authorizeRoles("faculty", "department", "admin"),
   reportController.updateReportStatus,
 );
-
+router.put(
+  "/:id",
+  verifyToken,
+  authorizeRoles("admin", "department"),
+  reportController.updateReport,
+);
+router.delete(
+  "/:id",
+  verifyToken,
+  authorizeRoles("admin", "department"),
+  reportController.deleteReport,
+);
 router.get("/generate/:id", reportGenerator.generateReport);
 
 router.get("/reports/:id", reportController.getSingleReport);

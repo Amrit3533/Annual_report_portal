@@ -2,6 +2,7 @@ const db = require("../config/db");
 const PDFDocument = require("pdfkit");
 const fs = require("fs");
 const AWS = require("aws-sdk");
+const { getFullReportData } = require("../services/reportService");
 
 const s3 = new AWS.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY,
@@ -13,50 +14,18 @@ exports.generateReport = async (req, res) => {
   try {
     const reportId = req.params.id;
 
-    // FETCH DATA
+    const data = await getFullReportData(reportId);
 
-    const [report] = await db.execute("SELECT * FROM reports WHERE id = ?", [
-      reportId,
-    ]);
-
-    if (!report.length) {
-      return res.status(404).json({ message: "Report not found" });
-    }
-
-    const [academic] = await db.execute(
-      "SELECT * FROM academic_data WHERE report_id = ?",
-      [reportId],
-    );
-
-    const [research] = await db.execute(
-      "SELECT * FROM research WHERE report_id = ?",
-      [reportId],
-    );
-
-    const [financial] = await db.execute(
-      "SELECT * FROM financial WHERE report_id = ?",
-      [reportId],
-    );
-
-    const [infrastructure] = await db.execute(
-      "SELECT * FROM infrastructure WHERE report_id = ?",
-      [reportId],
-    );
-
-    const [studentAchievement] = await db.execute(
-      "SELECT * FROM student_achievement WHERE report_id = ?",
-      [reportId],
-    );
-
-    const [facultyAchievement] = await db.execute(
-      "SELECT * FROM faculty_achievement WHERE report_id = ?",
-      [reportId],
-    );
-
-    const [activities] = await db.execute(
-      "SELECT * FROM extracurricular_activities WHERE report_id = ?",
-      [reportId],
-    );
+    const {
+      report,
+      academic,
+      research,
+      financial,
+      infrastructure,
+      studentAchievement,
+      facultyAchievement,
+      activities,
+    } = data;
 
     // GENERATE PDF
     const filePath = `report-${reportId}.pdf`;
@@ -66,21 +35,32 @@ exports.generateReport = async (req, res) => {
       const doc = new PDFDocument();
       doc.pipe(stream);
 
-      doc.fontSize(22).text("Annual Report", { align: "center" });
+      doc
+        .fontSize(26)
+        .fillColor("#2c3e50")
+        .text("ANNUAL REPORT", { align: "center" });
+
       doc.moveDown();
 
-      doc.fontSize(16).text(`Report Title: ${report[0].title}`);
-      doc.text(`Year: ${report[0].year}`);
-
+      doc
+        .fontSize(14)
+        .fillColor("black")
+        .text(`Title: ${report.title}`)
+        .text(`Year: ${report.year}`);
       doc.moveDown();
 
       // Academic
       if (academic.length > 0) {
         doc.fontSize(18).text("Academic Data");
-        doc
-          .fontSize(12)
-          .text(`Total Students: ${academic[0].total_students}`)
-          .text(`Pass Percentage: ${academic[0].pass_percentage}`);
+
+        academic.forEach((a) => {
+          doc
+            .fontSize(12)
+            .text(`Year: ${a.academic_year}`)
+            .text(`Students: ${a.total_students}`)
+            .text(`Pass %: ${a.pass_percentage}`)
+            .moveDown();
+        });
       }
 
       doc.moveDown();
@@ -96,10 +76,14 @@ exports.generateReport = async (req, res) => {
       // Financial
       if (financial.length > 0) {
         doc.fontSize(18).text("Financial Data");
-        doc
-          .fontSize(12)
-          .text(`Budget: ${financial[0].total_budget}`)
-          .text(`Expenditure: ${financial[0].expenditure}`);
+
+        financial.forEach((f) => {
+          doc
+            .fontSize(12)
+            .text(`Budget: ${f.total_budget}`)
+            .text(`Expenditure: ${f.expenditure}`)
+            .moveDown();
+        });
       }
 
       doc.moveDown();
@@ -117,6 +101,28 @@ exports.generateReport = async (req, res) => {
       facultyAchievement.forEach((f) => {
         doc.fontSize(12).text(`${f.achievement_title}`);
       });
+
+      // Infrastructure
+      if (infrastructure.length > 0) {
+        doc.fontSize(18).text("Infrastructure");
+
+        infrastructure.forEach((i) => {
+          doc
+            .fontSize(12)
+            .text(`Labs: ${i.labs_count}`)
+            .text(`Classrooms: ${i.classrooms_count}`)
+            .moveDown();
+        });
+      }
+
+      // Activities
+      if (activities.length > 0) {
+        doc.fontSize(18).text("Extracurricular Activities");
+
+        activities.forEach((a) => {
+          doc.fontSize(12).text(`${a.activity_name} (${a.event_date})`);
+        });
+      }
 
       doc.end();
       stream.on("finish", resolve);
@@ -140,7 +146,7 @@ exports.generateReport = async (req, res) => {
       Key: `reports/${filePath}`,
       Expires: 60 * 60, // 1 hour
     });
-    await db.execute("UPDATE reports SET s3_url = ? WHERE id = ?", [
+    await db.execute("UPDATE reports SET s3 = ? WHERE id = ?", [
       fileUrl,
       reportId,
     ]);

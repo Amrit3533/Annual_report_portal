@@ -1,5 +1,6 @@
 const db = require("../config/db");
 const { v4: uuidv4 } = require("uuid");
+const { getFullReportData } = require("../services/reportService");
 
 exports.createReport = async (req, res) => {
   try {
@@ -92,57 +93,6 @@ exports.updateReportStatus = async (req, res) => {
       error: error.message,
     });
   }
-  exports.getSingleReport = async (req, res) => {
-    try {
-      const { id } = req.params;
-
-      const [rows] = await db.execute("SELECT * FROM reports WHERE id = ?", [
-        id,
-      ]);
-
-      if (!rows.length) {
-        return res.status(404).json({ message: "Report not found" });
-      }
-
-      res.json(rows[0]);
-    } catch (err) {
-      res.status(500).json({ error: err.message });
-    }
-  };
-  exports.getSingleReport = async (req, res) => {
-    try {
-      const { id } = req.params;
-
-      const [rows] = await db.execute("SELECT * FROM reports WHERE id = ?", [
-        id,
-      ]);
-
-      if (!rows.length) {
-        return res.status(404).json({ message: "Report not found" });
-      }
-
-      res.json(rows[0]);
-    } catch (err) {
-      res.status(500).json({ error: err.message });
-    }
-  };
-  exports.getSingleReport = async (req, res) => {
-    try {
-      const { id } = req.params;
-
-      const [rows] = await db.execute("SELECT * FROM reports WHERE id = ?", [
-        id,
-      ]);
-
-      if (!rows.length) {
-        return res.status(404).json({ message: "Report not found" });
-      }
-
-      res.json(rows[0]);
-    } catch (err) {
-      res.status(500).json({ error: err.message });
-    }
-  };
 };
 
 exports.getSingleReport = async (req, res) => {
@@ -158,5 +108,60 @@ exports.getSingleReport = async (req, res) => {
     res.json(rows[0]);
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+};
+
+exports.getFullReport = async (req, res) => {
+  try {
+    const data = await getFullReportData(req.params.id);
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.updateReport = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, year, department_id, description } = req.body;
+
+    const [result] = await db.execute(
+      `UPDATE reports
+       SET title = ?, year = ?, department_id = ?, description = ?
+       WHERE id = ?`,
+      [title, year, department_id, description, id],
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Report not found" });
+    }
+
+    res.json({
+      message: "Report updated successfully",
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+exports.deleteReport = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const [result] = await db.execute("DELETE FROM reports WHERE id = ?", [id]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({
+        message: "Report not found",
+      });
+    }
+
+    res.json({
+      message: "Report deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: error.message,
+    });
   }
 };

@@ -1,4 +1,4 @@
-
+import axios from "axios";
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 
@@ -86,11 +86,10 @@ function SkeletonRow() {
     </tr>
   );
 }
-
+ 
 export default function Reports() {
   const navigate = useNavigate();
   const location = useLocation();
-
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -155,7 +154,11 @@ export default function Reports() {
 
   // Derived filter values from loaded reports
   const allYears = [
-    ...new Set((reports.length > 0 ? reports : fallbackReports).map((r) => r.year).filter(Boolean)),
+    ...new Set(
+      (reports.length > 0 ? reports : fallbackReports)
+        .map((r) => r.year)
+        .filter(Boolean),
+    ),
   ].sort((a, b) => b - a);
 
   useEffect(() => {
@@ -241,13 +244,16 @@ export default function Reports() {
     setSubmitting(id);
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`${API_BASE}/api/reports/${id}/submit`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      const res = await fetch(
+        `${API_BASE}/api/dashboard/reports/${id}/submit`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
         },
-      });
+      );
       if (!res.ok) {
         const d = await res.json().catch(() => ({}));
         throw new Error(d.message || "Submission failed.");
@@ -261,24 +267,49 @@ export default function Reports() {
     }
   };
 
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this report?",
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      await axios.delete(`/api/reports/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      alert("Report deleted successfully");
+      setReports((prev) => prev.filter((r) => r.id !== id));
+    } catch (error) {
+      console.error(error);
+      alert("Failed to delete report");
+    }
+  };
+
   // Frontend-only filtering and sorting
   const filterAndSortReports = (list) => {
     let filtered = [...list];
     // Search
     if (search.trim()) {
       const q = search.trim().toLowerCase();
-      filtered = filtered.filter(r =>
-        (r.title && r.title.toLowerCase().includes(q)) ||
-        (r.department && r.department.toLowerCase().includes(q))
+      filtered = filtered.filter(
+        (r) =>
+          (r.title && r.title.toLowerCase().includes(q)) ||
+          (r.department && r.department.toLowerCase().includes(q)),
       );
     }
     // Status
     if (filterStatus !== "all") {
-      filtered = filtered.filter(r => (r.status || "draft").toLowerCase() === filterStatus);
+      filtered = filtered.filter(
+        (r) => (r.status || "draft").toLowerCase() === filterStatus,
+      );
     }
     // Year
     if (filterYear !== "all") {
-      filtered = filtered.filter(r => String(r.year) === String(filterYear));
+      filtered = filtered.filter((r) => String(r.year) === String(filterYear));
     }
     // Sort
     switch (sortBy) {
@@ -306,7 +337,9 @@ export default function Reports() {
     return filtered;
   };
 
-  const displayed = filterAndSortReports(reports.length > 0 ? reports : fallbackReports);
+  const displayed = filterAndSortReports(
+    reports.length > 0 ? reports : fallbackReports,
+  );
 
   const activeFilters = [
     filterStatus !== "all",
@@ -751,8 +784,6 @@ export default function Reports() {
             ))}
           </select>
 
-
-
           <div className="toolbar-spacer" />
 
           {/* Count */}
@@ -889,7 +920,6 @@ export default function Reports() {
                     const id = report.id || report._id;
                     const status = report.status?.toLowerCase() || "draft";
 
-
                     return (
                       <tr key={id}>
                         {/* Title */}
@@ -931,7 +961,7 @@ export default function Reports() {
                             style={{ justifyContent: "flex-end" }}
                           >
                             <Link
-                              to={`/reports/${id}`}
+                              to={`/dashboard/reports/${id}`}
                               className="act-btn act-view"
                             >
                               <svg
@@ -950,7 +980,7 @@ export default function Reports() {
                             </Link>
 
                             <Link
-                              to={`/reports/${id}/edit`}
+                              to={`/dashboard/reports/${id}/edit`}
                               className="act-btn act-edit"
                             >
                               <svg
@@ -971,8 +1001,12 @@ export default function Reports() {
                             {/* Delete button */}
                             <button
                               className="act-btn act-submit"
-                              style={{ color: '#a0401e', borderColor: 'rgba(200,82,42,0.35)', background: '#fdf0ec' }}
-                              onClick={() => {}}
+                              style={{
+                                color: "#a0401e",
+                                borderColor: "rgba(200,82,42,0.35)",
+                                background: "#fdf0ec",
+                              }}
+                              onClick={() => handleDelete(id)}
                               title="Delete report"
                             >
                               <svg
@@ -1107,5 +1141,4 @@ export default function Reports() {
       )}
     </>
   );
-
 }
