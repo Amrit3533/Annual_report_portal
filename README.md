@@ -6,6 +6,17 @@ Annual Report Portal is a centralized web-based application designed for educati
 
 The portal enables departments to submit institutional data, administrators to manage users and departments, and management authorities to review consolidated reports through a single integrated system.
 
+Visuals:
+<img width="1366" height="720" alt="image" src="https://github.com/user-attachments/assets/e7dece61-ec72-4f7d-9a10-47a010ef855f" />
+<img width="1366" height="720" alt="image" src="https://github.com/user-attachments/assets/432e574e-6ffa-4948-9c1d-7655b16925dd" />
+<img width="1366" height="720" alt="image" src="https://github.com/user-attachments/assets/bbfb9372-d510-44f1-8d25-4336d17f373e" />
+<img width="1366" height="720" alt="image" src="https://github.com/user-attachments/assets/56404a96-30c6-4367-8279-a813b82b0fc4" />
+<img width="1366" height="720" alt="image" src="https://github.com/user-attachments/assets/7d77d6d2-e0bc-414c-9c23-d84b5d7a55c0" />
+<img width="1366" height="720" alt="image" src="https://github.com/user-attachments/assets/1b2c389b-5465-4154-baf0-ac945928ae4d" />
+<img width="1366" height="720" alt="image" src="https://github.com/user-attachments/assets/ceca0b52-f1c9-4088-a438-f9f17b6246ff" />
+
+
+
 ---
 
 ## Problem Statement
@@ -245,6 +256,10 @@ npm install
 npm start
 ```
 
+---
+### Test Credentials
+       Email: admin@arp.com
+       Password: 123456
 ---
 
 ## Future Enhancements
