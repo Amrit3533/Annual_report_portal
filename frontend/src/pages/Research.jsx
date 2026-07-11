@@ -1,12 +1,11 @@
 import axios from "axios";
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 const API = import.meta.env.VITE_API_URL || "";
 
 const inputStyle = {
   padding: "12px 14px",
   borderRadius: 8,
-  border: "1.5px solid #e0e0e0",
+  border: "1px solid #dbe4ee",
   fontSize: 15,
   outline: "none",
   fontWeight: 500,
@@ -47,18 +46,20 @@ const removeBtnStyle = {
   padding: 0,
 };
 const thStyle = {
-  padding: "10px 8px",
+  padding: "18px",
   textAlign: "left",
   fontWeight: 600,
-  color: "#222",
+  color: "#fff",
   minWidth: 80,
+  fontSize: 15,
 };
 const tdStyle = {
-  padding: "8px 8px",
-  color: "#444",
+  padding: "16px",
+  color: "#334155",
   fontWeight: 400,
-  fontSize: 15,
+  fontSize: 14,
   wordBreak: "break-word",
+  borderBottom: "1px solid #edf2f7",
 };
 
 function AddPublicationModal({ open, onClose, onAdd, existing }) {
@@ -104,7 +105,7 @@ function AddPublicationModal({ open, onClose, onAdd, existing }) {
         left: 0,
         width: "100vw",
         height: "100vh",
-        background: "rgba(0,0,0,0.18)",
+        background: "rgba(15,23,42,.55)",
         zIndex: 2000,
         display: "flex",
         alignItems: "center",
@@ -122,7 +123,7 @@ function AddPublicationModal({ open, onClose, onAdd, existing }) {
           minWidth: 340,
           maxWidth: 500,
           width: "95vw",
-          boxShadow: "0 2px 16px 0 rgba(0,0,0,0.10)",
+          boxShadow: "0 25px 60px rgba(0,0,0,.25)",
           display: "flex",
           flexDirection: "column",
           gap: 0,
@@ -133,7 +134,7 @@ function AddPublicationModal({ open, onClose, onAdd, existing }) {
       >
         <div
           style={{
-            background: "linear-gradient(90deg,#5b5bf7,#a0401e)",
+            background: "linear-gradient(135deg,#6366f1,#8b5cf6)",
             borderTopLeftRadius: 18,
             borderTopRightRadius: 18,
             padding: "20px 24px 12px 24px",
@@ -243,12 +244,7 @@ function AddPublicationModal({ open, onClose, onAdd, existing }) {
             onChange={(e) => setForm((f) => ({ ...f, year: e.target.value }))}
             style={inputStyle}
           />
-          <input
-            placeholder="DOI/URL"
-            value={form.doi}
-            onChange={(e) => setForm((f) => ({ ...f, doi: e.target.value }))}
-            style={inputStyle}
-          />
+          
           <input
             placeholder="Department"
             value={form.department}
@@ -293,7 +289,7 @@ function AddPublicationModal({ open, onClose, onAdd, existing }) {
             style={{
               background: "#fff",
               color: "#444",
-              border: "1.5px solid #e0e0e0",
+              border: "1px solid #dbe4ee",
               borderRadius: 8,
               padding: "10px 24px",
               fontWeight: 600,
@@ -405,130 +401,179 @@ export default function Research() {
     .sort((a, b) => b - a);
 
   return (
-    <div style={{ padding: 40, maxWidth: 1100, margin: "0 auto" }}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: 28,
-        }}
-      >
-        <h1 style={{ fontSize: 28, fontWeight: 700 }}>Research Publications</h1>
-        <button
-          onClick={() => setModalOpen(true)}
+    <div
+      style={{
+        minHeight: "100vh",
+        padding: "40px",
+        background:
+          "linear-gradient(135deg,#eef2ff 0%,#f8fafc 50%,#fdf2f8 100%)",
+      }}
+    >
+      <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+        <div
           style={{
-            background: "linear-gradient(90deg,#5b5bf7,#a0401e)",
-            color: "#fff",
-            border: "none",
-            borderRadius: 10,
-            padding: "12px 24px",
-            fontWeight: 600,
-            fontSize: 16,
-            cursor: "pointer",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: 28,
           }}
         >
-          + Add Publication
-        </button>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          gap: 18,
-          marginBottom: 18,
-          alignItems: "center",
-        }}
-      >
-        <label>Year:</label>
-        <select
-          value={yearFilter}
-          onChange={(e) => setYearFilter(e.target.value)}
-          style={{
-            padding: "6px 12px",
-            borderRadius: 6,
-            border: "1.5px solid #e0e0e0",
-            fontSize: 15,
-          }}
-        >
-          <option value="">All</option>
-          {years.map((y) => (
-            <option key={y} value={y}>
-              {y}
-            </option>
-          ))}
-        </select>
-        <label>Sort by:</label>
-        <select
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value)}
-          style={{
-            padding: "6px 12px",
-            borderRadius: 6,
-            border: "1.5px solid #e0e0e0",
-            fontSize: 15,
-          }}
-        >
-          <option value="year">Year</option>
-          <option value="journal">Journal/Conference</option>
-        </select>
-      </div>
-      <h3>Total Publications: {publications.length}</h3>
-      <div
-        style={{
-          background: "#fff",
-          borderRadius: 16,
-          boxShadow: "0 2px 12px 0 rgba(0,0,0,0.07)",
-          padding: 24,
-          minHeight: 200,
-        }}
-      >
-        {filtered.length === 0 ? (
-          <div style={{ color: "#888", fontSize: 18 }}>
-            No publications found.
+          <div>
+            <h1
+              style={{
+                margin: 0,
+                fontSize: 34,
+                fontWeight: 700,
+                color: "#1e293b",
+              }}
+            >
+              Research Publications
+            </h1>
+            <p style={{ marginTop: 6, color: "#64748b" }}>
+              Manage publications, papers and research records.
+            </p>
           </div>
-        ) : (
-          <table
-            style={{ width: "100%", borderCollapse: "collapse", fontSize: 15 }}
+          <button
+            onClick={() => setModalOpen(true)}
+            style={{
+              background: "linear-gradient(90deg,#5b5bf7,#a0401e)",
+              color: "#fff",
+              border: "none",
+              borderRadius: 10,
+              padding: "12px 24px",
+              fontWeight: 600,
+              fontSize: 16,
+              cursor: "pointer",
+            }}
           >
-            <thead>
-              <tr style={{ background: "#f5f2ec" }}>
-                <th style={thStyle}>Title</th>
-                <th style={thStyle}>Authors</th>
-                <th style={thStyle}>Journal/Conference</th>
-                <th style={thStyle}>Year</th>
-                <th style={thStyle}>DOI/URL</th>
-                <th style={thStyle}>Department</th>
-                <th style={thStyle}>PDF</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((pub, idx) => (
-                <tr key={idx} style={{ borderBottom: "1px solid #ede8de" }}>
-                  <td>{pub.paper_title}</td>
-                  <td>{pub.authors}</td>
-                  <td>{pub.journal_name}</td>
-                  <td>{pub.publication_year}</td>
-                  <td>
-                    {pub.doi_url && (
-                      <a href={pub.doi_url} target="_blank">
-                        Link
-                      </a>
-                    )}
-                  </td>
-                  <td>{pub.department_name}</td>
-                  <td>{pub.pdf_url ? "PDF" : ""}</td>
+            + Add Publication
+          </button>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            gap: 18,
+            alignItems: "center",
+            background: "#fff",
+            padding: 18,
+            borderRadius: 16,
+            marginBottom: 24,
+            boxShadow: "0 6px 15px rgba(0,0,0,.05)",
+          }}
+        >
+          <label>Year:</label>
+          <select
+            value={yearFilter}
+            onChange={(e) => setYearFilter(e.target.value)}
+            style={{
+              padding: "10px 14px",
+              borderRadius: 10,
+              border: "1px solid #dbe4ee",
+              fontSize: 15,
+            }}
+          >
+            <option value="">All</option>
+            {years.map((y) => (
+              <option key={y} value={y}>
+                {y}
+              </option>
+            ))}
+          </select>
+          <label>Sort by:</label>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            style={{
+              padding: "10px 14px",
+              borderRadius: 10,
+              border: "1px solid #dbe4ee",
+              fontSize: 15,
+            }}
+          >
+            <option value="year">Year</option>
+            <option value="journal">Journal/Conference</option>
+          </select>
+        </div>
+        <div
+          style={{
+            display: "inline-block",
+            marginBottom: 24,
+            padding: "18px 26px",
+            borderRadius: 16,
+            background: "#fff",
+            boxShadow: "0 8px 20px rgba(0,0,0,.06)",
+          }}
+        >
+          <div style={{ color: "#64748b", fontSize: 14 }}>
+            Total Publications
+          </div>
+          <div style={{ fontSize: 34, fontWeight: 700, color: "#4338ca" }}>
+            {publications.length}
+          </div>
+        </div>
+        <div
+          style={{
+            background: "#fff",
+            borderRadius: 18,
+            overflow: "hidden",
+            boxShadow: "0 12px 25px rgba(0,0,0,.08)",
+            padding: 0,
+            minHeight: 200,
+          }}
+        >
+          {filtered.length === 0 ? (
+            <div style={{ color: "#888", fontSize: 18 }}>
+              No publications found.
+            </div>
+          ) : (
+            <table
+              style={{
+                width: "100%",
+                borderCollapse: "collapse",
+                fontSize: 15,
+              }}
+            >
+              <thead>
+                <tr
+                  style={{
+                    background: "linear-gradient(90deg,#4f46e5,#7c3aed)",
+                    color: "#fff",
+                  }}
+                >
+                  <th style={thStyle}>Title</th>
+                  <th style={thStyle}>Authors</th>
+                  <th style={thStyle}>Journal/Conference</th>
+                  <th style={thStyle}>Year</th>
+                  <th style={thStyle}>Department</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+              </thead>
+              <tbody>
+                {filtered.map((pub, idx) => (
+                  <tr
+                    key={idx}
+                    style={{
+                      background: idx % 2 === 0 ? "#fff" : "#f8fafc",
+                      transition: ".2s",
+                    }}
+                  >
+                    <td style={tdStyle}>{pub.paper_title}</td>
+                    <td style={tdStyle}>{pub.authors}</td>
+                    <td style={tdStyle}>{pub.journal_name}</td>
+                    <td style={tdStyle}>{pub.publication_year}</td>
+                    <td style={tdStyle}>{pub.department_name}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+        <AddPublicationModal
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+          onAdd={handleAddPublication}
+          existing={publications}
+        />
       </div>
-      <AddPublicationModal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        onAdd={handleAddPublication}
-        existing={publications}
-      />
     </div>
   );
 }

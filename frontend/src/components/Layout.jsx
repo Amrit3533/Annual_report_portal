@@ -66,25 +66,6 @@ const NAV_ITEMS = [
     ),
   },
   {
-    label: "Student Achievement",
-    path: "/dashboard/student-achievement",
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-      </svg>
-    ),
-  },
-  {
-    label: "Faculty Achievement",
-    path: "/dashboard/faculty-achievement",
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="7" r="4" />
-        <path d="M6.5 17h11a2.5 2.5 0 0 1 2.5 2.5V21" />
-      </svg>
-    ),
-  },
-  {
     label: "Extracurricular Activities",
     path: "/dashboard/extracurricular-activities",
     icon: (

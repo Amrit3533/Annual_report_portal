@@ -13,8 +13,6 @@ import Departments from "./pages/Departments";
 import AcademicData from "./pages/AcademicData";
 import Research from "./pages/Research";
 import FinancialForm from "./pages/FinancialForm";
-import StudentAchievement from "./pages/StudentAchievement";
-import FacultyAchievement from "./pages/FacultyAchievement";
 import ExtracurricularActivities from "./pages/ExtracurricularActivities";
 import AcademicForm from "./pages/AcademicForm";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -35,8 +33,6 @@ function App() {
           <Route path="academic-data" element={<AcademicData />} />
           <Route path="research" element={<Research />} />
           <Route path="financial-form" element={<FinancialForm />} />
-          <Route path="student-achievement" element={<StudentAchievement />} />
-          <Route path="faculty-achievement" element={<FacultyAchievement />} />
           <Route path="extracurricular-activities" element={<ExtracurricularActivities />} />
           <Route path="reports" element={<Reports />} />
           <Route path="reports/create" element={<CreateReport />} />
